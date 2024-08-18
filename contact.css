@@ -29,7 +29,7 @@ body {
     color: grey;
 }
 
-#main {
+#main0 {
     position: absolute;
     left: 50%;
     top: 45%;
@@ -38,12 +38,29 @@ body {
     max-width: 800px;
 }
 
-#footer {
+#main1 {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+#footer0 {
     position: absolute;
     left: 50%;
     bottom: 0%;
     transform: translate(-50%, 0%);
     text-align: center;
+    color: grey;
+    max-width: 800px;
+    padding: 16px;
+}
+
+#footer1 {
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    text-align: justify;
     color: grey;
     max-width: 800px;
     padding: 16px;

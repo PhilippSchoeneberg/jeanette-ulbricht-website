@@ -29,7 +29,7 @@ body {
     color: grey;
 }
 
-#main {
+#main0 {
     display: flex;
     gap: 2vw;
     position: absolute;
@@ -39,12 +39,27 @@ body {
     max-width: 800px;
 }
 
+#main1 {
+    max-width: 800px;
+    margin-top: 5%;
+    margin-left: auto;
+    text-align: center;
+}
+
 #biography {
     text-align: justify;
 }
 
-#profilePicture {
-    width: 20vmin;
+#main0 > #profilePicture {
+    align-self: center;
+    width: 20vw;
+    height: 28vmin;
+    object-fit: cover;
+    object-position: center;
+}
+
+#main1 > #profilePicture {
+    width: 20vw;
     height: 28vmin;
     object-fit: cover;
     object-position: center;
