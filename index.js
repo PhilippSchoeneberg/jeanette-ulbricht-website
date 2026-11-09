@@ -8,11 +8,10 @@ window.onmousemove = e => {
     if(track.dataset.mouseDownAt === "0") return;
     
     const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
-        maxDelta = window.innerWidth / 2;
+    const maxDelta = window.innerWidth / 2;
     const percentage = (mouseDelta / maxDelta) * -100;
-        nextPercentage = parseFloat(track.dataset.prevPercentage) + percentage;
-        nextPercentage = Math.min(nextPercentage, 0);
-        nextPercentage = Math.max(nextPercentage, -100);
+    const unclamped = parseFloat(track.dataset.prevPercentage) + percentage;
+    const nextPercentage = Math.max(Math.min(unclamped, 0), -100);
 
     track.dataset.percentage = nextPercentage;
 
@@ -29,5 +28,8 @@ window.onmousemove = e => {
 
 window.onmouseup = e => {
     track.dataset.mouseDownAt = 0;
-    track.dataset.prevPercentage = track.dataset.percentage;
+    // A click without a drag never sets `percentage`; keep the previous position then.
+    if(track.dataset.percentage !== undefined) {
+        track.dataset.prevPercentage = track.dataset.percentage;
+    }
 }
