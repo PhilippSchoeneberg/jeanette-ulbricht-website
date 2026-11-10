@@ -1,4 +1,4 @@
-# Runs the pytest suite (backend + translation checks).
+# Runs the pytest suite (backend, translation checks and Playwright browser tests).
 #
 # - On every pull request into development or main: the "tests" check must pass before the
 #   pull request can be merged (required status check in the branch rulesets, see
@@ -28,7 +28,7 @@ jobs:
     # This name is the status check that the branch rulesets require. Keep it stable.
     name: tests
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +42,10 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
+
+      # Chromium for the browser tests in tests/e2e, plus the system libraries it needs.
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium
 
       - name: Run tests
         run: pytest

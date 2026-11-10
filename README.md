@@ -27,7 +27,8 @@ cp .env.example .env        # leave SMTP_HOST empty to print contact messages to
 
 Then open http://127.0.0.1:8000.
 
-Run the tests with `.venv/bin/pytest`. GitHub Actions runs them on every pull request into
+Run the tests with `.venv/bin/pytest`. The browser tests (Playwright, `tests/e2e`) need Chromium
+once: `.venv/bin/playwright install chromium`. GitHub Actions runs them on every pull request into
 `development` or `main`; merging requires them to pass (see [Development](doc/development.md#continuous-integration)).
 
 ## Documentation
