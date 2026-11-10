@@ -12,22 +12,21 @@ images) is placeholder, and the Impressum and Datenschutz pages still have to be
 
 ## Quick start
 
+Needs [uv](https://docs.astral.sh/uv/) (`brew install uv`).
+
 ```bash
-python3 -m venv .venv
-```
-```bash
-.venv/bin/pip install -r requirements-dev.txt
+uv sync
 ```
 ```bash
 cp .env.example .env        # leave SMTP_HOST empty to print contact messages to the console
 ```
 ```bash
-.venv/bin/uvicorn src.backend.main:app --reload
+uv run uvicorn src.backend.main:app --reload
 ```
 
 Then open http://127.0.0.1:8000.
 
-Run the tests with `.venv/bin/pytest`. GitHub Actions runs them on every pull request into
+Run the tests with `uv run pytest` and the linter with `uv run ruff check .`. GitHub Actions runs both on every pull request into
 `development` or `main`; merging requires them to pass (see [Development](doc/development.md#continuous-integration)).
 
 ## Documentation

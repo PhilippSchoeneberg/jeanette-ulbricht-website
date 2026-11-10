@@ -4,8 +4,8 @@ Because of the contact form, the site needs a host that can run Python. The Fast
 both the pages and the API, so a single process is enough:
 
 ```bash
-pip install -r requirements.txt
-uvicorn src.backend.main:app --host 127.0.0.1 --port 8000 --proxy-headers --forwarded-allow-ips 127.0.0.1
+uv sync --frozen --no-dev
+uv run --no-sync uvicorn src.backend.main:app --host 127.0.0.1 --port 8000 --proxy-headers --forwarded-allow-ips 127.0.0.1
 ```
 
 Run it behind a reverse proxy (e.g. nginx or Caddy) that handles HTTPS. `--proxy-headers` makes
