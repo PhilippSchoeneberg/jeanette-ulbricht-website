@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-Portfolio homepage for **Jeanette Ulbricht**, a media designer (Mediengestalterin). The site presents her work (portfolio), a short biography and contact details. Audience: potential clients and employers, mostly German-speaking.
+Portfolio homepage for **Jeanette Ulbricht**, a media designer (Mediengestalterin). The site presents her work (portfolio), a short biography, contact details and a contact form. Audience: potential clients and employers, mostly German-speaking.
 
 The site is a **draft**: structure and design are in place, content is placeholder. Improving structure is welcome as long as the visual identity (see below) is kept unless the user asks otherwise.
 
@@ -14,17 +14,22 @@ The site is a **draft**: structure and design are in place, content is placehold
 
 ## Tech stack
 
-Plain static site — **HTML, CSS, vanilla JavaScript**. No build step, no package manager, no framework, no tests.
+- Frontend: **HTML, CSS, vanilla JavaScript** — no build step, no framework, no npm.
+- Backend: **Python 3.11+ with FastAPI** (`src/backend`). It serves the frontend as static files and provides `POST /api/contact`, which e-mails contact form messages via SMTP (nothing is stored). Dependencies are pinned in `requirements.txt` / `requirements-dev.txt`. Structure follows the user's FormelX project (`create_app(settings)` factory, settings from `.env`).
+- Tests: pytest for the backend (`tests/`, fake mailer, no mail server needed). No frontend tests.
 
-Run locally from the repository root (opening the files directly also works):
+Setup and run from the repository root:
 
 ```bash
-python3 -m http.server 8000 --directory src/frontend
+python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
+cp .env.example .env     # SMTP_HOST empty = contact messages printed to the console
+.venv/bin/uvicorn src.backend.main:app --reload
+.venv/bin/pytest
 ```
 
-Project documentation lives in `doc/` (architecture, development, deployment) and the `README.md`. Keep them in sync when changing structure, workflow or run commands.
+Project documentation lives in `doc/` (architecture, api, development, deployment) and the `README.md`. Keep them in sync when changing structure, API, workflow or run commands.
 
-Don't introduce a framework, bundler or npm dependencies without asking the user first. If tooling is added later, update this file.
+Don't introduce a frontend framework, bundler or npm dependencies, or new Python dependencies, without asking the user first. Never commit `.env`.
 
 ## File layout
 
@@ -32,7 +37,7 @@ Don't introduce a framework, bundler or npm dependencies without asking the user
 | --- | --- |
 | `src/frontend/index.html` / `css/home.css` | Portfolio (landing page): hero tile, project tiles, gallery carousel, call to action |
 | `src/frontend/biography.html` / `css/biography.css` | Biography: portrait + text, focus-area cards, career timeline |
-| `src/frontend/contact.html` / `css/contact.css` | Contact cards (e-mail, phone) |
+| `src/frontend/contact.html` / `css/contact.css` / `js/contact-form.js` | Contact cards (e-mail, phone) and contact form (client-side validation, sends JSON to `/api/contact`) |
 | `src/frontend/impressum.html`, `datenschutz.html` / `css/legal.css` | Legal pages — **draft placeholders only**, marked "nicht veröffentlichen" |
 | `src/frontend/css/base.css` | Design tokens (CSS custom properties), reset, typography, buttons, global nav, footer, shared components (page hero, sections, cards, scroll reveal) |
 | `src/frontend/js/main.js` | Light/dark theme toggle, mobile navigation menu, scroll-reveal (IntersectionObserver); loaded on every page |
@@ -40,9 +45,11 @@ Don't introduce a framework, bundler or npm dependencies without asking the user
 | `src/frontend/assets/favicon.ico` | Favicon |
 | `src/frontend/assets/images/exampleSet0/` | Profile picture placeholder |
 | `src/frontend/assets/images/exampleSet1/` | Portfolio placeholder images (`image0–7.jpg`, 1600px high) |
-| `src/backend/` | Reserved for a future backend (e.g. contact form); currently only a README |
+| `src/backend/` | FastAPI app: `main.py` (entry), `app.py` (factory, static mount), `config.py` (env settings), `routers/contact.py`, `schemas.py`, `mailer.py` (SMTP / console), `rate_limit.py` |
+| `tests/` | pytest tests for the backend |
+| `requirements*.txt`, `.env.example`, `pytest.ini` | Python dependencies, config template, test config |
 | `doc/` | Architecture, development and deployment docs |
-| `.claude/launch.json` | Local preview server config (serves `src/frontend` on port 8000) |
+| `.claude/launch.json` | Local preview config (runs the FastAPI app with uvicorn on port 8000; needs `.venv`) |
 
 All paths inside the pages are relative to `src/frontend/`. Every page repeats the same `<head>` (including the inline theme script), global nav (`.global-nav`) and footer (`.global-footer`) markup — there is no templating. Changes to nav/footer must be applied to **all five pages**. Each page sets `aria-current="page"` on its own nav link.
 
@@ -82,7 +89,7 @@ Not decided yet — confirm with the user before starting larger items:
 - Portfolio detail views (lightbox or project pages with title, client, year, description); make tiles/gallery items link to them.
 - Real content: biography, contact, projects, optimized images (WebP/AVIF, `srcset`).
 - Open Graph tags per page.
-- `mailto:` / `tel:` links once real contact data exists; possibly a contact form (needs a backend/service — ask first).
+- `mailto:` / `tel:` links once real contact data exists.
 - Possibly a small build step or includes for the shared nav/footer (ask first — currently no tooling).
 
 ## Conventions

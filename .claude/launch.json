@@ -2,9 +2,9 @@
     "version": "0.0.1",
     "configurations": [
         {
-            "name": "static",
-            "runtimeExecutable": "python3",
-            "runtimeArgs": ["-m", "http.server", "8000", "--directory", "src/frontend"],
+            "name": "app",
+            "runtimeExecutable": ".venv/bin/uvicorn",
+            "runtimeArgs": ["src.backend.main:app", "--reload", "--port", "8000"],
             "port": 8000
         }
     ]

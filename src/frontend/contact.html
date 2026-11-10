@@ -22,6 +22,7 @@
         })();
     </script>
     <script src="js/main.js" defer></script>
+    <script src="js/contact-form.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
@@ -66,6 +67,63 @@
                         <p class="contact-card__value">+49 XXXX XXXXXXX</p>
                     </li>
                 </ul>
+            </div>
+        </section>
+
+        <section class="section section--alt" aria-labelledby="form-title">
+            <div class="section__inner contact-form-wrapper">
+                <h2 class="section-headline reveal" id="form-title">
+                    Nachricht schreiben.
+                    <span class="section-headline__muted">Ich melde mich bei Ihnen.</span>
+                </h2>
+
+                <noscript>
+                    <p class="form-status form-status--error">Das Kontaktformular benötigt JavaScript. Bitte schreiben Sie mir alternativ eine E-Mail.</p>
+                </noscript>
+
+                <form class="contact-form reveal" action="/api/contact" method="post" novalidate data-contact-form>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label class="form-field__label" for="contact-name">Name</label>
+                            <input class="form-field__input" id="contact-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="contact-name-error">
+                            <p class="form-field__error" id="contact-name-error" data-error-for="name"></p>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field__label" for="contact-email">E-Mail</label>
+                            <input class="form-field__input" id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="contact-email-error">
+                            <p class="form-field__error" id="contact-email-error" data-error-for="email"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-field__label" for="contact-subject">Betreff <span class="form-field__optional">(optional)</span></label>
+                        <input class="form-field__input" id="contact-subject" name="subject" type="text" maxlength="150" aria-describedby="contact-subject-error">
+                        <p class="form-field__error" id="contact-subject-error" data-error-for="subject"></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-field__label" for="contact-message">Nachricht</label>
+                        <textarea class="form-field__input form-field__input--textarea" id="contact-message" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="contact-message-error"></textarea>
+                        <p class="form-field__error" id="contact-message-error" data-error-for="message"></p>
+                    </div>
+
+                    <!-- Honeypot against spam bots: hidden from people, must stay empty -->
+                    <div class="form-honeypot" aria-hidden="true">
+                        <label for="contact-website">Website (bitte leer lassen)</label>
+                        <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <!-- Placeholder wording: to be checked together with the Datenschutzerklärung -->
+                    <p class="contact-form__privacy">
+                        Ihre Angaben werden nur zur Bearbeitung Ihrer Anfrage verwendet. Mehr dazu in der
+                        <a href="datenschutz.html">Datenschutzerklärung</a>.
+                    </p>
+
+                    <div class="contact-form__footer">
+                        <button class="button contact-form__submit" type="submit" data-label-sending="Wird gesendet …">Nachricht senden</button>
+                        <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+                    </div>
+                </form>
             </div>
         </section>
     </main>

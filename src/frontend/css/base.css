@@ -31,6 +31,9 @@
     --color-control-bg-hover: rgba(223, 223, 227, 0.7);
     --color-notice-bg: #fff4ce;
     --color-notice-text: #5c4400;
+    --color-error: #d70015;
+    --color-success: #248a3d;
+    --color-input-bg: #ffffff;
 
     /* Typography: system fonts only, nothing is loaded from third parties */
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -64,6 +67,9 @@
     --color-control-bg-hover: rgba(80, 80, 84, 0.8);
     --color-notice-bg: #3a2f00;
     --color-notice-text: #ffe08a;
+    --color-error: #ff6961;
+    --color-success: #30d158;
+    --color-input-bg: #1d1d1f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -82,6 +88,9 @@
         --color-control-bg-hover: rgba(80, 80, 84, 0.8);
         --color-notice-bg: #3a2f00;
         --color-notice-text: #ffe08a;
+        --color-error: #ff6961;
+        --color-success: #30d158;
+        --color-input-bg: #1d1d1f;
     }
 }
 
