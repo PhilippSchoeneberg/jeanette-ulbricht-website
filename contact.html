@@ -1,35 +1,77 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Jeanette Ulbricht</title>
-        <meta charset="utf-8">
-        <link rel="icon" href="images/exampleSet0/favicon.ico">
-        <link rel="stylesheet" href="contact.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="author" content="Philipp Schöneberg">
-		<meta charset="utf-8">
-    </head>
-    <body>
-        <section id="top">
-            <div id="logo-name">Jeanette Ulbricht</div>
-            <div id="navigation">
-                <a href="biography.html">Biografie</a>
-                <a href="index.html">Portfolio</a>
-				<a href="contact.html">Kontakt</a>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kontakt – Jeanette Ulbricht, Mediengestalterin</title>
+    <meta name="description" content="Kontakt zu Jeanette Ulbricht, Mediengestalterin.">
+    <meta name="author" content="Philipp Schöneberg">
+    <link rel="icon" href="images/exampleSet0/favicon.ico">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <script>document.documentElement.classList.add("js");</script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+    <header class="global-nav" data-nav>
+        <nav class="global-nav__inner" aria-label="Hauptnavigation">
+            <a class="global-nav__brand" href="index.html">Jeanette Ulbricht</a>
+            <button class="global-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen" data-nav-toggle>
+                <span class="global-nav__toggle-bar"></span>
+                <span class="global-nav__toggle-bar"></span>
+            </button>
+            <ul class="global-nav__menu" id="nav-menu">
+                <li><a href="biography.html">Biografie</a></li>
+                <li><a href="index.html">Portfolio</a></li>
+                <li><a href="contact.html" aria-current="page">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+        <header class="page-hero">
+            <p class="eyebrow">Kontakt</p>
+            <h1 class="headline-hero">Sprechen wir über Ihr Projekt.</h1>
+            <p class="intro">Für Anfragen, Projekte und Kooperationen erreichen Sie mich hier.</p>
+        </header>
+
+        <section class="section" aria-label="Kontaktdaten">
+            <div class="section__inner">
+                <ul class="card-grid contact-grid">
+                    <li class="card contact-card reveal">
+                        <h2 class="contact-card__label">E-Mail</h2>
+                        <!-- Placeholder: replace with the real address and a mailto: link -->
+                        <p class="contact-card__value">xxxxxxxx.xxxxxxxxxxx@xxx.xx</p>
+                    </li>
+                    <li class="card contact-card reveal">
+                        <h2 class="contact-card__label">Telefon</h2>
+                        <!-- Placeholder: replace with the real number and a tel: link -->
+                        <p class="contact-card__value">+49 XXXX XXXXXXX</p>
+                    </li>
+                </ul>
             </div>
         </section>
-        <section id="main0">
-            <div id="contact">
-                <h2>Kontakt</h2>
-				<p>E-Mail: xxxxxxxx.xxxxxxxxxxx@xxx.xx</p>
-				<p>Telefon: +49 XXXX XXXXXXX</p>
+    </main>
+
+    <footer class="global-footer">
+        <div class="global-footer__inner">
+            <nav class="global-footer__nav" aria-label="Fußzeile">
+                <ul>
+                    <li><a href="biography.html">Biografie</a></li>
+                    <li><a href="index.html">Portfolio</a></li>
+                    <li><a href="contact.html">Kontakt</a></li>
+                </ul>
+            </nav>
+            <div class="global-footer__legal">
+                <p>Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
+                <ul class="global-footer__legal-links">
+                    <li><a href="impressum.html">Impressum</a></li>
+                    <li><a href="datenschutz.html">Datenschutz</a></li>
+                </ul>
             </div>
-        </section>
-		<section id="footer0">
-			</BR>
-			<h2>Hinweis</h2>
-			<p>Der Webmaster dieser Website erklärt hiermit ausdrücklich, dass er keinerlei Einfluss auf die Gestaltung und die Inhalte der gelinkten Seiten hat. Deshalb distanziert er sich ausdrücklich von allen Inhalten aller gelinkten Seiten auf dieser Homepage und macht sich diese Inhalte nicht zu Eigen. Diese Erklärung gilt für alle in dieser Domain gezeigten Links und für alle Inhalte der Seiten, zu denen die hier angemeldeten Banner und Links führen.</p>
-        </section>
-        <script src="./sizeFitter.js"></script>
-    </body>
+        </div>
+    </footer>
+</body>
 </html>

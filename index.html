@@ -1,35 +1,215 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Jeanette Ulbricht</title>
-        <meta charset="utf-8">
-        <link rel="icon" href="images/exampleSet0/favicon.ico">
-        <link rel="stylesheet" href="index.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="author" content="Philipp Schöneberg">
-		<meta charset="utf-8">
-    </head>
-    <body>
-        <section id="top">
-            <div id="logo-name">Jeanette Ulbricht</div>
-            <div id="navigation">
-                <a href="biography.html">Biografie</a>
-                <a href="index.html">Portfolio</a>
-				<a href="contact.html">Kontakt</a>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jeanette Ulbricht – Mediengestalterin | Portfolio</title>
+    <meta name="description" content="Portfolio von Jeanette Ulbricht, Mediengestalterin: ausgewählte Arbeiten und Projekte.">
+    <meta name="author" content="Philipp Schöneberg">
+    <link rel="icon" href="images/exampleSet0/favicon.ico">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script>document.documentElement.classList.add("js");</script>
+    <script src="js/main.js" defer></script>
+    <script src="js/gallery.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+    <header class="global-nav" data-nav>
+        <nav class="global-nav__inner" aria-label="Hauptnavigation">
+            <a class="global-nav__brand" href="index.html">Jeanette Ulbricht</a>
+            <button class="global-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen" data-nav-toggle>
+                <span class="global-nav__toggle-bar"></span>
+                <span class="global-nav__toggle-bar"></span>
+            </button>
+            <ul class="global-nav__menu" id="nav-menu">
+                <li><a href="biography.html">Biografie</a></li>
+                <li><a href="index.html" aria-current="page">Portfolio</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+        <div class="tiles">
+            <!-- Hero -->
+            <section class="tile tile--full tile--hero theme-dark" aria-labelledby="hero-title">
+                <div class="tile__text">
+                    <p class="tile__eyebrow">Mediengestalterin</p>
+                    <h1 class="headline-hero" id="hero-title">Jeanette Ulbricht</h1>
+                    <p class="tile__subhead">Platzhalter für einen kurzen Claim zur eigenen Arbeit.</p>
+                    <div class="button-row">
+                        <a class="button" href="#arbeiten">Arbeiten ansehen</a>
+                        <a class="button button--secondary" href="contact.html">Kontakt</a>
+                    </div>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image3.jpg" alt="Platzhalterbild für die Startseite" width="2845" height="1600" fetchpriority="high">
+                </div>
+            </section>
+
+            <!-- Featured projects. All titles and texts are placeholders. -->
+            <article class="tile tile--full reveal" id="arbeiten">
+                <div class="tile__text">
+                    <h2 class="tile__headline">Projekt 1</h2>
+                    <p class="tile__subhead">Kurzbeschreibung des Projekts (Platzhalter).</p>
+                    <p class="tile__meta">Kunde · Jahr · Kategorie</p>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image0.jpg" alt="Platzhalterbild für Projekt 1" width="2399" height="1600" loading="lazy" decoding="async">
+                </div>
+            </article>
+
+            <article class="tile theme-dark reveal">
+                <div class="tile__text">
+                    <h2 class="tile__headline">Projekt 2</h2>
+                    <p class="tile__subhead">Kurzbeschreibung (Platzhalter).</p>
+                    <p class="tile__meta">Kunde · Jahr · Kategorie</p>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image1.jpg" alt="Platzhalterbild für Projekt 2" width="2844" height="1600" loading="lazy" decoding="async">
+                </div>
+            </article>
+
+            <article class="tile reveal">
+                <div class="tile__text">
+                    <h2 class="tile__headline">Projekt 3</h2>
+                    <p class="tile__subhead">Kurzbeschreibung (Platzhalter).</p>
+                    <p class="tile__meta">Kunde · Jahr · Kategorie</p>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image2.jpg" alt="Platzhalterbild für Projekt 3" width="2399" height="1600" loading="lazy" decoding="async">
+                </div>
+            </article>
+
+            <article class="tile reveal">
+                <div class="tile__text">
+                    <h2 class="tile__headline">Projekt 4</h2>
+                    <p class="tile__subhead">Kurzbeschreibung (Platzhalter).</p>
+                    <p class="tile__meta">Kunde · Jahr · Kategorie</p>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image4.jpg" alt="Platzhalterbild für Projekt 4" width="2400" height="1600" loading="lazy" decoding="async">
+                </div>
+            </article>
+
+            <article class="tile theme-dark reveal">
+                <div class="tile__text">
+                    <h2 class="tile__headline">Projekt 5</h2>
+                    <p class="tile__subhead">Kurzbeschreibung (Platzhalter).</p>
+                    <p class="tile__meta">Kunde · Jahr · Kategorie</p>
+                </div>
+                <div class="tile__media">
+                    <img src="images/exampleSet1/image5.jpg" alt="Platzhalterbild für Projekt 5" width="2400" height="1600" loading="lazy" decoding="async">
+                </div>
+            </article>
+        </div>
+
+        <!-- Gallery: draggable image track -->
+        <section class="gallery" aria-labelledby="gallery-title" data-gallery>
+            <div class="gallery__header reveal">
+                <h2 class="section-headline" id="gallery-title">
+                    Weitere Arbeiten.
+                    <span class="section-headline__muted">Ziehen, wischen, entdecken.</span>
+                </h2>
+            </div>
+
+            <div class="gallery__viewport" tabindex="0" role="region" aria-roledescription="Karussell" aria-label="Weitere Arbeiten, mit den Pfeiltasten blättern" data-gallery-viewport>
+                <ul class="gallery__track" data-gallery-track>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image0.jpg" alt="Platzhalterbild für Arbeit 1" width="2399" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 1</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image1.jpg" alt="Platzhalterbild für Arbeit 2" width="2844" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 2</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image2.jpg" alt="Platzhalterbild für Arbeit 3" width="2399" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 3</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image3.jpg" alt="Platzhalterbild für Arbeit 4" width="2845" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 4</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image4.jpg" alt="Platzhalterbild für Arbeit 5" width="2400" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 5</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image5.jpg" alt="Platzhalterbild für Arbeit 6" width="2400" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 6</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image6.jpg" alt="Platzhalterbild für Arbeit 7" width="2400" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 7</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                    <li class="gallery__item">
+                        <figure>
+                            <img src="images/exampleSet1/image7.jpg" alt="Platzhalterbild für Arbeit 8" width="2400" height="1600" loading="lazy" decoding="async">
+                            <figcaption><span class="gallery__title">Arbeit 8</span><span class="gallery__meta">Kategorie · Jahr</span></figcaption>
+                        </figure>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="gallery__controls">
+                <button class="gallery__button" type="button" aria-label="Vorherige Arbeiten" data-gallery-prev>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="gallery__button" type="button" aria-label="Nächste Arbeiten" data-gallery-next>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
             </div>
         </section>
-        <section id="main">
-            <div id="image-track" data-mouse-down-at ="0" data-prev-percentage="0">
-                <img class="image" src="images/exampleSet1/image0.jpg" alt="Image0" draggable="false">
-                <img class="image" src="images/exampleSet1/image1.jpg" alt="Image1" draggable="false">
-                <img class="image" src="images/exampleSet1/image2.jpg" alt="Image2" draggable="false">
-                <img class="image" src="images/exampleSet1/image3.jpg" alt="Image3" draggable="false">
-                <img class="image" src="images/exampleSet1/image4.jpg" alt="Image4" draggable="false">
-                <img class="image" src="images/exampleSet1/image5.jpg" alt="Image5" draggable="false">
-                <img class="image" src="images/exampleSet1/image6.jpg" alt="Image6" draggable="false">
-                <img class="image" src="images/exampleSet1/image7.jpg" alt="Image7" draggable="false">
+
+        <!-- Call to action -->
+        <div class="tiles tiles--single">
+            <section class="tile tile--full tile--cta reveal" aria-labelledby="cta-title">
+                <div class="tile__text">
+                    <h2 class="tile__headline" id="cta-title">Neugierig geworden?</h2>
+                    <p class="tile__subhead">Ich freue mich auf Ihre Anfrage.</p>
+                    <div class="button-row">
+                        <a class="button" href="contact.html">Kontakt aufnehmen</a>
+                        <a class="button button--secondary" href="biography.html">Mehr über mich</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="global-footer">
+        <div class="global-footer__inner">
+            <nav class="global-footer__nav" aria-label="Fußzeile">
+                <ul>
+                    <li><a href="biography.html">Biografie</a></li>
+                    <li><a href="index.html">Portfolio</a></li>
+                    <li><a href="contact.html">Kontakt</a></li>
+                </ul>
+            </nav>
+            <div class="global-footer__legal">
+                <p>Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
+                <ul class="global-footer__legal-links">
+                    <li><a href="impressum.html">Impressum</a></li>
+                    <li><a href="datenschutz.html">Datenschutz</a></li>
+                </ul>
             </div>
-        </section>
-        <script src="./index.js"></script>
-    </body>
+        </div>
+    </footer>
+</body>
 </html>

@@ -1,30 +1,132 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Jeanette Ulbricht</title>
-        <meta charset="utf-8">
-        <link rel="icon" href="images/exampleSet0/favicon.ico">
-        <link rel="stylesheet" href="biography.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="author" content="Philipp Schöneberg">
-		<meta charset="utf-8">
-    </head>
-    <body>
-        <section id="top">
-            <div id="logo-name">Jeanette Ulbricht</div>
-            <div id="navigation">
-                <a href="biography.html">Biografie</a>
-                <a href="index.html">Portfolio</a>
-				<a href="contact.html">Kontakt</a>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Biografie – Jeanette Ulbricht, Mediengestalterin</title>
+    <meta name="description" content="Biografie von Jeanette Ulbricht, Mediengestalterin: Werdegang und Schwerpunkte.">
+    <meta name="author" content="Philipp Schöneberg">
+    <link rel="icon" href="images/exampleSet0/favicon.ico">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/biography.css">
+    <script>document.documentElement.classList.add("js");</script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+    <header class="global-nav" data-nav>
+        <nav class="global-nav__inner" aria-label="Hauptnavigation">
+            <a class="global-nav__brand" href="index.html">Jeanette Ulbricht</a>
+            <button class="global-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen" data-nav-toggle>
+                <span class="global-nav__toggle-bar"></span>
+                <span class="global-nav__toggle-bar"></span>
+            </button>
+            <ul class="global-nav__menu" id="nav-menu">
+                <li><a href="biography.html" aria-current="page">Biografie</a></li>
+                <li><a href="index.html">Portfolio</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+        <header class="page-hero">
+            <p class="eyebrow">Biografie</p>
+            <h1 class="headline-hero">Über mich.</h1>
+            <p class="intro">Platzhalter für einen einleitenden Satz zur Person.</p>
+        </header>
+
+        <section class="section" aria-label="Porträt und Vorstellung">
+            <div class="section__inner about">
+                <figure class="about__portrait reveal">
+                    <img src="images/exampleSet0/image0.jpg" alt="Porträt von Jeanette Ulbricht (Platzhalterbild)" width="1066" height="1600" decoding="async">
+                </figure>
+                <div class="about__text reveal">
+                    <p class="about__lead">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+                    <p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+                    <div class="button-row">
+                        <a class="button" href="contact.html">Kontakt aufnehmen</a>
+                        <a class="button button--secondary" href="index.html#arbeiten">Arbeiten ansehen</a>
+                    </div>
+                </div>
             </div>
         </section>
-        <section id="main0">
-            <img id="profilePicture" src="images/exampleSet0/image0.jpg" alt="Profile picture" draggable="false">
-            <div id="biography">
-                <h2>Biografie</h2>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+
+        <section class="section section--alt" aria-labelledby="focus-title">
+            <div class="section__inner">
+                <h2 class="section-headline reveal" id="focus-title">
+                    Schwerpunkte.
+                    <span class="section-headline__muted">Was ich gestalte.</span>
+                </h2>
+                <ul class="card-grid">
+                    <li class="card reveal">
+                        <h3 class="card__title">Schwerpunkt 1</h3>
+                        <p class="card__text">Kurzbeschreibung des Leistungsbereichs (Platzhalter).</p>
+                    </li>
+                    <li class="card reveal">
+                        <h3 class="card__title">Schwerpunkt 2</h3>
+                        <p class="card__text">Kurzbeschreibung des Leistungsbereichs (Platzhalter).</p>
+                    </li>
+                    <li class="card reveal">
+                        <h3 class="card__title">Schwerpunkt 3</h3>
+                        <p class="card__text">Kurzbeschreibung des Leistungsbereichs (Platzhalter).</p>
+                    </li>
+                </ul>
             </div>
         </section>
-        <script src="./sizeFitter.js"></script>
-    </body>
+
+        <section class="section" aria-labelledby="career-title">
+            <div class="section__inner">
+                <h2 class="section-headline reveal" id="career-title">
+                    Werdegang.
+                    <span class="section-headline__muted">Stationen bisher.</span>
+                </h2>
+                <ol class="timeline reveal">
+                    <li class="timeline__item">
+                        <span class="timeline__year">20XX – heute</span>
+                        <div>
+                            <h3 class="timeline__title">Station / Position</h3>
+                            <p class="timeline__text">Unternehmen, Ort (Platzhalter).</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item">
+                        <span class="timeline__year">20XX – 20XX</span>
+                        <div>
+                            <h3 class="timeline__title">Station / Position</h3>
+                            <p class="timeline__text">Unternehmen, Ort (Platzhalter).</p>
+                        </div>
+                    </li>
+                    <li class="timeline__item">
+                        <span class="timeline__year">20XX – 20XX</span>
+                        <div>
+                            <h3 class="timeline__title">Ausbildung</h3>
+                            <p class="timeline__text">Ausbildungsbetrieb oder Schule, Ort (Platzhalter).</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer class="global-footer">
+        <div class="global-footer__inner">
+            <nav class="global-footer__nav" aria-label="Fußzeile">
+                <ul>
+                    <li><a href="biography.html">Biografie</a></li>
+                    <li><a href="index.html">Portfolio</a></li>
+                    <li><a href="contact.html">Kontakt</a></li>
+                </ul>
+            </nav>
+            <div class="global-footer__legal">
+                <p>Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
+                <ul class="global-footer__legal-links">
+                    <li><a href="impressum.html">Impressum</a></li>
+                    <li><a href="datenschutz.html">Datenschutz</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
 </html>
