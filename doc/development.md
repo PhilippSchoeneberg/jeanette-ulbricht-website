@@ -65,3 +65,23 @@ them (for example with `sips --resampleHeight 1600` on macOS) and set `width` / 
   `development` (`feature/<name>`, `fix/<name>`).
 - Feature branches are merged into `development` through pull requests; `development` is merged
   into `main` for a release.
+
+## Continuous integration
+
+`.github/workflows/tests.yml` runs `pytest` on GitHub Actions (Python 3.11, the oldest supported
+version):
+
+- on every pull request into `development` or `main`,
+- after every merge (push) into `development` or `main`,
+- manually from the repository's **Actions** tab.
+
+The job is called `tests`. The rulesets for `development` and `main` (repository **Settings →
+Rules → Rulesets**) require it as a status check, so a pull request can only be merged once the
+tests pass. Together with the other ruleset rules, `development` and `main` can only change
+through pull requests, can't be force-pushed and can't be deleted.
+
+To set the required check up again (e.g. for a new protected branch): open the ruleset, enable
+**Require status checks to pass**, add the check `tests` (source: GitHub Actions) and save. The
+check can only be selected after the workflow has run at least once. If the job is ever renamed,
+update the rulesets too, otherwise pull requests wait forever for a check that never reports.
+
