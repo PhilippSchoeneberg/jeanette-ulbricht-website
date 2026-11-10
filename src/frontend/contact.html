@@ -9,7 +9,18 @@
     <link rel="icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/contact.css">
-    <script>document.documentElement.classList.add("js");</script>
+    <script>
+        // Runs before first paint: enable JS styles and apply the saved or system colour theme.
+        (function () {
+            var root = document.documentElement, theme = null;
+            root.classList.add("js");
+            try { theme = localStorage.getItem("theme"); } catch (e) {}
+            if (theme !== "light" && theme !== "dark") {
+                theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            root.dataset.theme = theme;
+        })();
+    </script>
     <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -27,6 +38,10 @@
                 <li><a href="index.html">Portfolio</a></li>
                 <li><a href="contact.html" aria-current="page">Kontakt</a></li>
             </ul>
+            <button class="theme-toggle" type="button" aria-label="Dunkles Design aktivieren" data-theme-toggle>
+                <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
         </nav>
     </header>
 

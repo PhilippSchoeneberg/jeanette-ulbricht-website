@@ -4,11 +4,18 @@
    cards, scroll reveal).
    ========================================================================== */
 
+/* Colour themes: light by default, dark when the visitor's system prefers it,
+   unless a theme was chosen with the toggle (data-theme on <html>, set by the
+   inline script in each page's <head> and by js/main.js). */
 :root {
+    color-scheme: light;
+
     /* Colours */
     --color-bg: #ffffff;
     --color-bg-alt: #f5f5f7;
     --color-bg-dark: #000000;
+    --color-tile: #f5f5f7;
+    --color-tile-dark: #000000;
     --color-text: #1d1d1f;
     --color-text-secondary: #6e6e73;
     --color-text-on-dark: #f5f5f7;
@@ -22,6 +29,8 @@
     --color-nav-text: #e8e8ed;
     --color-control-bg: rgba(210, 210, 215, 0.64);
     --color-control-bg-hover: rgba(223, 223, 227, 0.7);
+    --color-notice-bg: #fff4ce;
+    --color-notice-text: #5c4400;
 
     /* Typography: system fonts only, nothing is loaded from third parties */
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -37,6 +46,43 @@
 
     /* Motion */
     --ease: cubic-bezier(0.28, 0.11, 0.32, 1);
+}
+
+/* Dark colour tokens, used for an explicit choice and for the system preference */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-bg: #000000;
+    --color-bg-alt: #161617;
+    --color-tile: #1d1d1f;
+    --color-tile-dark: #000000;
+    --color-text: #f5f5f7;
+    --color-text-secondary: #a1a1a6;
+    --color-link: #2997ff;
+    --color-border: #424245;
+    --color-control-bg: rgba(66, 66, 69, 0.72);
+    --color-control-bg-hover: rgba(80, 80, 84, 0.8);
+    --color-notice-bg: #3a2f00;
+    --color-notice-text: #ffe08a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        --color-bg: #000000;
+        --color-bg-alt: #161617;
+        --color-tile: #1d1d1f;
+        --color-tile-dark: #000000;
+        --color-text: #f5f5f7;
+        --color-text-secondary: #a1a1a6;
+        --color-link: #2997ff;
+        --color-border: #424245;
+        --color-control-bg: rgba(66, 66, 69, 0.72);
+        --color-control-bg-hover: rgba(80, 80, 84, 0.8);
+        --color-notice-bg: #3a2f00;
+        --color-notice-text: #ffe08a;
+    }
 }
 
 @media (max-width: 734px) {
@@ -273,7 +319,7 @@ button {
 .global-nav__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 28px;
     max-width: var(--content-width);
     height: 100%;
     margin: 0 auto;
@@ -281,6 +327,7 @@ button {
 }
 
 .global-nav__brand {
+    margin-right: auto;
     color: var(--color-nav-text);
     font-size: 17px;
     font-weight: 600;
@@ -319,7 +366,51 @@ button {
     display: none;
 }
 
+/* Light/dark switch (needs JS, so it is hidden without it) */
+.theme-toggle {
+    display: none;
+}
+
+.js .theme-toggle {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--color-nav-text);
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.js .theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+}
+
+.theme-toggle svg {
+    width: 17px;
+    height: 17px;
+}
+
+.theme-toggle__sun,
+:root[data-theme="dark"] .theme-toggle__moon {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__sun {
+    display: block;
+}
+
 @media (max-width: 833px) {
+    .global-nav__inner {
+        gap: 12px;
+    }
+
     .global-nav__menu {
         gap: 20px;
     }
@@ -328,6 +419,7 @@ button {
     .js .global-nav__toggle {
         position: relative;
         display: block;
+        order: 2;
         width: 48px;
         height: var(--nav-height);
         margin-right: -14px;

@@ -35,7 +35,7 @@ Don't introduce a framework, bundler or npm dependencies without asking the user
 | `src/frontend/contact.html` / `css/contact.css` | Contact cards (e-mail, phone) |
 | `src/frontend/impressum.html`, `datenschutz.html` / `css/legal.css` | Legal pages — **draft placeholders only**, marked "nicht veröffentlichen" |
 | `src/frontend/css/base.css` | Design tokens (CSS custom properties), reset, typography, buttons, global nav, footer, shared components (page hero, sections, cards, scroll reveal) |
-| `src/frontend/js/main.js` | Mobile navigation menu + scroll-reveal (IntersectionObserver); loaded on every page |
+| `src/frontend/js/main.js` | Light/dark theme toggle, mobile navigation menu, scroll-reveal (IntersectionObserver); loaded on every page |
 | `src/frontend/js/gallery.js` | Draggable image track with parallax (Pointer Events, horizontal wheel/trackpad, keyboard, prev/next buttons) |
 | `src/frontend/assets/favicon.ico` | Favicon |
 | `src/frontend/assets/images/exampleSet0/` | Profile picture placeholder |
@@ -44,13 +44,14 @@ Don't introduce a framework, bundler or npm dependencies without asking the user
 | `doc/` | Architecture, development and deployment docs |
 | `.claude/launch.json` | Local preview server config (serves `src/frontend` on port 8000) |
 
-All paths inside the pages are relative to `src/frontend/`. Every page repeats the same `<head>`, global nav (`.global-nav`) and footer (`.global-footer`) markup — there is no templating. Changes to nav/footer must be applied to **all five pages**. Each page sets `aria-current="page"` on its own nav link.
+All paths inside the pages are relative to `src/frontend/`. Every page repeats the same `<head>` (including the inline theme script), global nav (`.global-nav`) and footer (`.global-footer`) markup — there is no templating. Changes to nav/footer must be applied to **all five pages**. Each page sets `aria-current="page"` on its own nav link.
 
 ## Visual identity (current design)
 
 Redesigned in an Apple-inspired style (clean, light, large type, tiles). Only the design language is borrowed — no Apple logos, product names, images or font files.
 
 - Colours (tokens in `src/frontend/css/base.css`): white / light grey `#f5f5f7` / black tiles, text `#1d1d1f`, secondary text `#6e6e73`, accent blue `#0071e3` for buttons and `#0066cc` for links.
+- Light and dark theme: dark tokens apply via `<html data-theme="dark">` or, without JS, `prefers-color-scheme: dark`. An inline `<head>` script on every page sets `data-theme` before paint (saved `localStorage` "theme", else system preference); the sun/moon `.theme-toggle` in the nav switches and saves it. New colours must be tokens with a value in **both** the light and dark sets (the dark set appears twice in `base.css`: explicit choice and system preference — keep them identical).
 - Font: system font stack (`system-ui, -apple-system, …`) — nothing loaded from third parties.
 - Global nav: 48px sticky, dark translucent bar with blur; name left, links right (Biografie · Portfolio · Kontakt); full-screen menu with a two-bar toggle below 834px.
 - Large centred headlines (hero 80px, sections 48px, semibold), section headlines with a grey second sentence ("Weitere Arbeiten. Ziehen, wischen, entdecken.").
