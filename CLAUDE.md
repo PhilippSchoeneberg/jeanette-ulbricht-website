@@ -24,7 +24,7 @@ Setup and run from the repository root:
 ```bash
 uv sync
 uv run playwright install chromium     # browser for tests/e2e (once)
-cp .env.example .env     # SMTP_HOST empty = contact messages printed to the console
+cp .env.example .env     # APP_ENV=development, SMTP_HOST empty = contact messages printed to the console
 uv run uvicorn src.backend.main:app --reload
 uv run pytest                          # all tests; -m "not e2e" skips the browser tests
 uv run pytest tests/e2e --headed       # watch the browser tests
@@ -49,7 +49,7 @@ Don't introduce a frontend framework, bundler or npm dependencies, or new Python
 | `src/frontend/assets/favicon.ico` | Favicon |
 | `src/frontend/assets/images/exampleSet0/` | Profile picture placeholder |
 | `src/frontend/assets/images/exampleSet1/` | Portfolio placeholder images (`image0–7.jpg`, 1600px high) |
-| `src/backend/` | FastAPI app: `main.py` (entry), `app.py` (factory, static mount), `config.py` (env settings), `routers/contact.py`, `schemas.py`, `mailer.py` (SMTP / console), `rate_limit.py` |
+| `src/backend/` | FastAPI app: `main.py` (entry), `app.py` (factory, static mount, middlewares), `config.py` (env settings, `APP_ENV`), `routers/contact.py`, `schemas.py`, `mailer.py` (SMTP / console), `rate_limit.py`, `security.py` (body size limit, security headers / CSP) |
 | `tests/` | pytest: API/translation tests (`test_*.py`, `conftest.py`), shared `fakes.py` (fake mailer) |
 | `tests/e2e/` | Playwright browser tests; `conftest.py` starts the app with uvicorn on a free port (fake mailer) |
 | `pyproject.toml`, `uv.lock`, `.env.example` | Python dependencies (uv), pytest and ruff config; lock file; config template |
@@ -102,6 +102,7 @@ Not decided yet — confirm with the user before starting larger items:
 - Keep it dependency-free and readable; small, focused files.
 - Use semantic HTML (`header`, `nav`, `main`, `footer`), relative paths, 4-space indentation, BEM-style class names (`block__element--modifier`); no IDs for styling.
 - Test changes in a browser at desktop and phone widths (≈375px) before calling them done.
+- Security (see `doc/architecture.md#security`, `src/backend/security.py`): the CSP forbids inline scripts, inline `style` attributes, `eval` and third-party resources — put scripts in `src/frontend/js/` (`js/head.js` for code that must run before first paint) and never add external resources without updating the policy deliberately. Request bodies are limited to 64 KB. `APP_ENV` defaults to `production` (mail server required, API docs off); local runs use `APP_ENV=development`. In Playwright tests use `page.evaluate` polling instead of `wait_for_function` (blocked by the CSP's no-`eval`).
 - Accessibility (target WCAG 2.2 AA, checked in `tests/e2e/test_accessibility.py`): new colours need ≥4.5:1 for text and ≥3:1 for control borders/focus rings in **both** themes; links inside running text (`p a`) stay underlined; visible focus via `outline` (never `outline: none` + box-shadow; white ring inside the dark nav); lists styled without bullets get `role="list"`; an `aria-label` must start with the button's visible text; the open mobile menu makes the rest of the page `inert`; use `aria-disabled` rather than `disabled` for buttons that can be focused when they switch off. With `prefers-reduced-motion`, transitions are switched off entirely (`transition: none`); never shorten them with a global `transition-duration`, which gives every element a transition on every property.
 - Don't commit unless the user asks.
 

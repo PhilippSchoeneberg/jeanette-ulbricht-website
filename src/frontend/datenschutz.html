@@ -10,35 +10,7 @@
     <link rel="icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/legal.css">
-    <script>
-        // Runs before first paint: enable JS styles, apply the saved or system colour theme and pick the language.
-        (function () {
-            var root = document.documentElement, theme = null;
-            root.classList.add("js");
-            try { theme = localStorage.getItem("theme"); } catch (e) {}
-            if (theme !== "light" && theme !== "dark") {
-                theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-            }
-            root.dataset.theme = theme;
-
-            var language = null;
-            try { language = localStorage.getItem("language"); } catch (e) {}
-            if (language !== "de" && language !== "en") {
-                language = "de";
-                var preferred = navigator.languages || [navigator.language];
-                for (var i = 0; i < preferred.length; i++) {
-                    var code = String(preferred[i] || "").slice(0, 2).toLowerCase();
-                    if (code === "de" || code === "en") { language = code; break; }
-                }
-            }
-            root.dataset.language = language;
-            if (language !== "de") {
-                // Hide the German page until js/i18n.js has applied the translation.
-                root.classList.add("i18n-loading");
-                setTimeout(function () { root.classList.remove("i18n-loading"); }, 1500);
-            }
-        })();
-    </script>
+    <script src="js/head.js"></script>
     <script src="js/i18n.js" defer></script>
     <script src="js/main.js" defer></script>
 </head>

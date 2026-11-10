@@ -11,9 +11,10 @@ uv run playwright install chromium     # browser for the browser tests (once, ~1
 cp .env.example .env
 ```
 
-For local development, leave `SMTP_HOST` in `.env` empty: contact form messages are then printed
-to the server console instead of being sent. To test real sending, fill in the SMTP settings
-(see `.env.example`).
+`.env.example` sets `APP_ENV=development`. In development, with `SMTP_HOST` empty, contact form
+messages are printed to the server console instead of being sent, and the API docs are available.
+To test real sending, fill in the SMTP settings (see `.env.example`). Without `.env` the app
+starts in production mode and refuses to run without a mail server.
 
 ## Run
 
@@ -23,7 +24,7 @@ From the repository root:
 uv run uvicorn src.backend.main:app --reload
 ```
 
-Open http://127.0.0.1:8000. The API docs are at http://127.0.0.1:8000/api/docs.
+Open http://127.0.0.1:8000. The API docs are at http://127.0.0.1:8000/api/docs (development only).
 
 The frontend has no build step: edit files in `src/frontend` and reload the page. Without the
 backend (e.g. `python3 -m http.server 8000 --directory src/frontend`) all pages work except

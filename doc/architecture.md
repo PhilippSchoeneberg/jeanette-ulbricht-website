@@ -21,6 +21,7 @@ src/
 │   │   ├── contact.css     Contact cards and contact form
 │   │   └── legal.css       Impressum / Datenschutz
 │   ├── js/
+│   │   ├── head.js         Theme and language before first paint (every page, no defer)
 │   │   ├── i18n.js         Language switching (every page)
 │   │   ├── main.js         Theme toggle, mobile navigation, scroll reveal (every page)
 │   │   ├── gallery.js      Draggable image carousel (portfolio page)
@@ -38,7 +39,8 @@ src/
     ├── routers/contact.py  POST /api/contact
     ├── schemas.py          Request validation (Pydantic)
     ├── mailer.py           SMTP mailer; console mailer for development
-    └── rate_limit.py       In-memory rate limiter
+    ├── rate_limit.py       In-memory rate limiter
+    └── security.py         Request size limit, security headers (CSP)
 tests/                      Backend and translation tests (pytest)
 └── e2e/                    Browser tests (Playwright, headless Chromium)
 doc/                        This documentation
@@ -105,17 +107,43 @@ With `prefers-reduced-motion` the movement is instant and the parallax is off.
 
 `create_app(settings)` builds the FastAPI app: the API under `/api` and, for every other path,
 the static files from `src/frontend` (so `/` serves `index.html`). Interactive API docs are at
-`/api/docs`; see [API](api.md).
+`/api/docs` in development only; see [API](api.md).
 
 The contact form (`contact.html`, `js/contact-form.js`) validates in the browser and sends JSON
 to `POST /api/contact`. The backend validates again, then e-mails the message to
 `CONTACT_RECIPIENT` via SMTP, with the visitor as `Reply-To`. **Messages are not stored.**
-Without `SMTP_HOST` (local development) the e-mail is printed to the console instead.
+Without `SMTP_HOST` the e-mail is printed to the console instead, but only with
+`APP_ENV=development`; in production (the default) the app refuses to start without a mail server.
 
 Spam protection:
 
 - a hidden honeypot field (`website`); if filled, the request "succeeds" but nothing is sent
 - at most 5 messages per client IP per 15 minutes, counted in memory (per server process)
+
+## Security
+
+`src/backend/security.py` adds two middlewares to every response, pages and API alike:
+
+- **Request size limit**: bodies over 64 KB get a 413 before they are read into memory (also for
+  chunked requests without `Content-Length`).
+- **Security headers**: a strict Content Security Policy (only the site's own scripts, styles,
+  images and translations; no inline scripts or styles, no `eval`, no third parties, no framing),
+  plus `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`,
+  `Permissions-Policy` and cross-origin policies. The development-only `/api/docs` page is exempt
+  from the CSP, since Swagger UI loads from a CDN.
+
+Because of the CSP, the script that has to run before the first paint (theme and language) is a
+separate file, `js/head.js`, loaded without `defer` — not an inline `<script>`. New external
+resources, inline scripts or inline `style` attributes would be blocked: change the policy in
+`security.py` deliberately if one is ever needed. `tests/test_security.py` and
+`tests/e2e/test_content_security_policy.py` check the headers and that pages work without CSP
+violations.
+
+Other protections: the API only accepts JSON (so other sites can't submit the form on a visitor's
+behalf), name and subject can't contain line breaks (no e-mail header injection), the recipient is
+fixed (no open relay), the frontend never builds HTML from data (`textContent` only), and stored
+preferences are whitelisted. CI actions are pinned to commit SHAs and Dependabot proposes updates
+(`.github/dependabot.yml`).
 
 ## Roadmap
 
