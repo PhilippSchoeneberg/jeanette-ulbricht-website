@@ -102,6 +102,7 @@ Not decided yet — confirm with the user before starting larger items:
 - Keep it dependency-free and readable; small, focused files.
 - Use semantic HTML (`header`, `nav`, `main`, `footer`), relative paths, 4-space indentation, BEM-style class names (`block__element--modifier`); no IDs for styling.
 - Test changes in a browser at desktop and phone widths (≈375px) before calling them done.
+- Accessibility (target WCAG 2.2 AA, checked in `tests/e2e/test_accessibility.py`): new colours need ≥4.5:1 for text and ≥3:1 for control borders/focus rings in **both** themes; links inside running text (`p a`) stay underlined; visible focus via `outline` (never `outline: none` + box-shadow; white ring inside the dark nav); lists styled without bullets get `role="list"`; an `aria-label` must start with the button's visible text; the open mobile menu makes the rest of the page `inert`; use `aria-disabled` rather than `disabled` for buttons that can be focused when they switch off.
 - Don't commit unless the user asks.
 
 ## Git workflow (feature branching)

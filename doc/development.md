@@ -51,6 +51,11 @@ The tests run the real FastAPI app with a fake mailer, so they need no mail serv
   toggle, language switch, mobile menu at 375px and the contact form (field errors, successful
   send, rate limit, mail error). Each test gets a fresh browser (empty `localStorage`), German,
   light mode and reduced motion, so animations finish instantly.
+- `tests/e2e/test_accessibility.py`: accessibility checks (WCAG 2.2 AA) — contrast of form
+  colours in light and dark mode, underlined links in text, visible focus (form fields, the light
+  ring in the navigation), focus staying in the open mobile menu, focusable gallery buttons at the
+  ends, the language button's name and list semantics. They don't replace a check with a real
+  screen reader (VoiceOver, NVDA).
 
 ```bash
 uv run pytest                          # everything
