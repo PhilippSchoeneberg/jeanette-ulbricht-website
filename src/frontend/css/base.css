@@ -415,6 +415,46 @@ button {
     display: block;
 }
 
+/* Language and theme switches, side by side */
+.global-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Language switch (needs JS, so it is hidden without it). Shows the other language's code. */
+.language-toggle {
+    display: none;
+}
+
+.js .language-toggle {
+    display: block;
+    flex: none;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 16px;
+    background: none;
+    color: var(--color-nav-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.js .language-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+}
+
+/* Hide the page while a non-German translation loads (set by the inline <head> script). */
+.i18n-loading body {
+    visibility: hidden;
+}
+
 @media (max-width: 833px) {
     .global-nav__inner {
         gap: 12px;

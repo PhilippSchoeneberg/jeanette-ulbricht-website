@@ -21,9 +21,13 @@ src/
 │   │   ├── contact.css     Contact cards and contact form
 │   │   └── legal.css       Impressum / Datenschutz
 │   ├── js/
+│   │   ├── i18n.js         Language switching (every page)
 │   │   ├── main.js         Theme toggle, mobile navigation, scroll reveal (every page)
 │   │   ├── gallery.js      Draggable image carousel (portfolio page)
 │   │   └── contact-form.js Contact form validation and sending (contact page)
+│   ├── locales/
+│   │   ├── de.json         German texts (same as in the HTML)
+│   │   └── en.json         English translations
 │   └── assets/
 │       ├── favicon.ico
 │       └── images/         Placeholder images
@@ -35,7 +39,7 @@ src/
     ├── schemas.py          Request validation (Pydantic)
     ├── mailer.py           SMTP mailer; console mailer for development
     └── rate_limit.py       In-memory rate limiter
-tests/                      Backend tests (pytest)
+tests/                      Backend and translation tests (pytest)
 doc/                        This documentation
 ```
 
@@ -57,6 +61,30 @@ dark mode. A small inline script in each page's `<head>` sets `data-theme` befor
 (saved choice from `localStorage` key `theme`, otherwise the system preference), so there is no
 flash of the wrong theme. The sun/moon button in the navigation (`js/main.js`) switches the theme
 and saves the choice; without a saved choice the site follows system changes live.
+
+## Languages
+
+The site is German with an English translation. German is written directly in the HTML, so the
+pages work without JavaScript and search engines see German. Translatable elements carry keys:
+
+- `data-i18n="key"`: the element's text (elements with this attribute contain text only)
+- `data-i18n-<attribute>="key"`: an attribute, e.g. `data-i18n-alt`, `data-i18n-aria-label`,
+  `data-i18n-content` (meta description)
+
+`js/i18n.js` loads `locales/<code>.json` and applies the texts. Scripts use `window.i18n.t(key)`
+for texts they create (form messages, button labels) and re-render on the `languagechange`
+event. The "EN"/"DE" button in the navigation switches the language and saves the choice in
+`localStorage` (`language`); otherwise the browser language decides (German or English, else
+German). The inline `<head>` script picks the language before first paint and hides the page
+while a non-German translation loads (at most 1.5 s).
+
+The Impressum and Datenschutzerklärung stay German in every language (the German version is the
+legally relevant one); in English they show a note saying so. Only their navigation, footer and
+headings are translated.
+
+`tests/test_locales.py` checks that both locale files have the same keys, that every key used in
+the pages and scripts exists, that no key is unused, and that `de.json` matches the German text
+in the HTML.
 
 Breakpoints: 1068px and 734px for layout and type, 834px for the mobile navigation menu.
 

@@ -1,5 +1,5 @@
 // Contact form: client-side validation and sending to the backend
-// (POST /api/contact, see doc/api.md).
+// (POST /api/contact, see doc/api.md). Texts come from js/i18n.js (locales/*.json).
 
 (() => {
     const form = document.querySelector("[data-contact-form]");
@@ -7,32 +7,35 @@
 
     const submitButton = form.querySelector("[type=submit]");
     const statusOutput = form.querySelector("[data-form-status]");
-    const submitLabel = submitButton.textContent;
 
-    const FIELD_MESSAGES = {
-        name: "Bitte geben Sie Ihren Namen an.",
-        email: "Bitte geben Sie eine gültige E-Mail-Adresse an.",
-        subject: "Der Betreff darf höchstens 150 Zeichen lang sein.",
-        message: "Bitte schreiben Sie eine Nachricht mit mindestens 10 Zeichen.",
-    };
-    const STATUS_MESSAGES = {
-        sent: "Vielen Dank! Ihre Nachricht wurde gesendet.",
-        invalid: "Bitte prüfen Sie die markierten Felder.",
-        rateLimited: "Sie haben gerade mehrere Nachrichten gesendet. Bitte versuchen Sie es später erneut.",
-        failed: "Die Nachricht konnte leider nicht gesendet werden. Bitte versuchen Sie es später erneut oder schreiben Sie eine E-Mail.",
+    // Translation keys of the error message per field.
+    const FIELD_ERRORS = {
+        name: "form_error_name",
+        email: "form_error_email",
+        subject: "form_error_subject",
+        message: "form_error_message",
     };
 
-    function setFieldError(name, message) {
+    const t = key => window.i18n?.t(key) ?? key;
+
+    // Remember what is shown as keys, so it can be re-rendered when the language changes.
+    const shownFieldErrors = {};
+    let shownStatus = { type: "", key: "" };
+    let sending = false;
+
+    function setFieldError(name, key) {
         const field = form.elements[name];
         const errorOutput = form.querySelector(`[data-error-for="${name}"]`);
         if (!field || !errorOutput) return;
-        field.setAttribute("aria-invalid", message ? "true" : "false");
-        errorOutput.textContent = message || "";
+        shownFieldErrors[name] = key || "";
+        field.setAttribute("aria-invalid", key ? "true" : "false");
+        errorOutput.textContent = key ? t(key) : "";
     }
 
-    function setStatus(type, message) {
+    function setStatus(type, key) {
+        shownStatus = { type, key };
         statusOutput.className = "form-status" + (type ? ` form-status--${type}` : "");
-        statusOutput.textContent = message || "";
+        statusOutput.textContent = key ? t(key) : "";
     }
 
     function fieldIsValid(field) {
@@ -45,10 +48,10 @@
     // Returns true if all fields are valid; otherwise marks them and focuses the first one.
     function validate() {
         let firstInvalid = null;
-        for (const name of Object.keys(FIELD_MESSAGES)) {
+        for (const [name, key] of Object.entries(FIELD_ERRORS)) {
             const field = form.elements[name];
             const valid = fieldIsValid(field);
-            setFieldError(name, valid ? "" : FIELD_MESSAGES[name]);
+            setFieldError(name, valid ? "" : key);
             if (!valid && !firstInvalid) firstInvalid = field;
         }
         firstInvalid?.focus();
@@ -58,15 +61,23 @@
     // Clear a field's error as soon as it becomes valid.
     form.addEventListener("input", event => {
         const name = event.target.name;
-        if (name in FIELD_MESSAGES && event.target.getAttribute("aria-invalid") === "true" && fieldIsValid(event.target)) {
+        if (name in FIELD_ERRORS && shownFieldErrors[name] && fieldIsValid(event.target)) {
             setFieldError(name, "");
         }
     });
 
-    function setSending(sending) {
-        submitButton.disabled = sending;
-        submitButton.textContent = sending ? submitButton.dataset.labelSending : submitLabel;
+    function setSending(value) {
+        sending = value;
+        submitButton.disabled = value;
+        submitButton.textContent = t(value ? "form_sending" : "form_submit");
     }
+
+    // Re-render visible messages in the new language.
+    document.addEventListener("languagechange", () => {
+        for (const [name, key] of Object.entries(shownFieldErrors)) setFieldError(name, key);
+        setStatus(shownStatus.type, shownStatus.key);
+        if (sending) submitButton.textContent = t("form_sending");
+    });
 
     form.addEventListener("submit", async event => {
         event.preventDefault();
@@ -84,22 +95,22 @@
 
             if (response.ok) {
                 form.reset();
-                setStatus("success", STATUS_MESSAGES.sent);
+                setStatus("success", "form_status_sent");
             } else if (response.status === 422) {
                 // Map server-side validation errors to the fields.
                 const body = await response.json().catch(() => ({}));
                 for (const error of Array.isArray(body.detail) ? body.detail : []) {
                     const name = error.loc?.[error.loc.length - 1];
-                    if (name in FIELD_MESSAGES) setFieldError(name, FIELD_MESSAGES[name]);
+                    if (name in FIELD_ERRORS) setFieldError(name, FIELD_ERRORS[name]);
                 }
-                setStatus("error", STATUS_MESSAGES.invalid);
+                setStatus("error", "form_status_invalid");
             } else if (response.status === 429) {
-                setStatus("error", STATUS_MESSAGES.rateLimited);
+                setStatus("error", "form_status_rate_limited");
             } else {
-                setStatus("error", STATUS_MESSAGES.failed);
+                setStatus("error", "form_status_failed");
             }
         } catch {
-            setStatus("error", STATUS_MESSAGES.failed);
+            setStatus("error", "form_status_failed");
         } finally {
             setSending(false);
         }
