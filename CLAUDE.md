@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 Portfolio homepage for **Jeanette Ulbricht**, a media designer (Mediengestalterin). The site presents her work (portfolio), a short biography and contact details. Audience: potential clients and employers, mostly German-speaking.
 
-The current code is an early **draft / prototype** (v1.0). Treat it as a starting point, not as an architecture to preserve. Improving structure is welcome as long as the visual identity (see below) is kept unless the user asks otherwise.
+The site is a **draft**: structure and design are in place, content is placeholder. Improving structure is welcome as long as the visual identity (see below) is kept unless the user asks otherwise.
 
 - Site language: **German** (navigation, headings, copy). Code, comments and commit messages: English.
 - Author/maintainer: Philipp Schöneberg (`<meta name="author">`).
@@ -16,11 +16,13 @@ The current code is an early **draft / prototype** (v1.0). Treat it as a startin
 
 Plain static site — **HTML, CSS, vanilla JavaScript**. No build step, no package manager, no framework, no tests.
 
-Run locally by opening `index.html` in a browser, or serve the folder:
+Run locally from the repository root (opening the files directly also works):
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8000 --directory src/frontend
 ```
+
+Project documentation lives in `doc/` (architecture, development, deployment) and the `README.md`. Keep them in sync when changing structure, workflow or run commands.
 
 Don't introduce a framework, bundler or npm dependencies without asking the user first. If tooling is added later, update this file.
 
@@ -28,61 +30,64 @@ Don't introduce a framework, bundler or npm dependencies without asking the user
 
 | File | Purpose |
 | --- | --- |
-| `index.html` / `index.css` / `index.js` | Portfolio page (landing page): horizontal draggable image track |
-| `biography.html` / `biography.css` | Biography: profile picture + text |
-| `contact.html` / `contact.css` | Contact details + legal disclaimer ("Hinweis") footer |
-| `sizeFitter.js` | Swaps element IDs (`main0`↔`main1`, `footer0`↔`footer1`) below 800px width for a mobile layout; used by biography and contact |
-| `images/exampleSet0/` | Profile picture placeholder + `favicon.ico` |
-| `images/exampleSet1/` | Portfolio placeholder images (`image0–7.jpg`) |
+| `src/frontend/index.html` / `css/home.css` | Portfolio (landing page): hero tile, project tiles, gallery carousel, call to action |
+| `src/frontend/biography.html` / `css/biography.css` | Biography: portrait + text, focus-area cards, career timeline |
+| `src/frontend/contact.html` / `css/contact.css` | Contact cards (e-mail, phone) |
+| `src/frontend/impressum.html`, `datenschutz.html` / `css/legal.css` | Legal pages — **draft placeholders only**, marked "nicht veröffentlichen" |
+| `src/frontend/css/base.css` | Design tokens (CSS custom properties), reset, typography, buttons, global nav, footer, shared components (page hero, sections, cards, scroll reveal) |
+| `src/frontend/js/main.js` | Mobile navigation menu + scroll-reveal (IntersectionObserver); loaded on every page |
+| `src/frontend/js/gallery.js` | Draggable image track with parallax (Pointer Events, horizontal wheel/trackpad, keyboard, prev/next buttons) |
+| `src/frontend/assets/favicon.ico` | Favicon |
+| `src/frontend/assets/images/exampleSet0/` | Profile picture placeholder |
+| `src/frontend/assets/images/exampleSet1/` | Portfolio placeholder images (`image0–7.jpg`, 1600px high) |
+| `src/backend/` | Reserved for a future backend (e.g. contact form); currently only a README |
+| `doc/` | Architecture, development and deployment docs |
+| `.claude/launch.json` | Local preview server config (serves `src/frontend` on port 8000) |
 
-Every page repeats the same `<head>`, header (`#top`, `#logo-name`, `#navigation`) and the same base CSS (body, header, nav). Changes to shared parts must be applied to **all three pages** (or, better, extracted — see roadmap).
+All paths inside the pages are relative to `src/frontend/`. Every page repeats the same `<head>`, global nav (`.global-nav`) and footer (`.global-footer`) markup — there is no templating. Changes to nav/footer must be applied to **all five pages**. Each page sets `aria-current="page"` on its own nav link.
 
 ## Visual identity (current design)
 
-- Black background, white text, grey (`grey`) for hover states and secondary text.
-- Font: Arial / Helvetica / sans-serif.
-- Centered name as logo (32px bold), simple text navigation below: Biografie · Portfolio · Kontakt.
-- Full-viewport pages with `overflow: hidden`; content absolutely centered.
-- Portfolio interaction: click-and-drag horizontal image track with parallax (`object-position` animated alongside the track `transform`, 1200ms `animate()` with `fill: "forwards"`). This interaction is the signature element of the site — keep it working when refactoring.
+Redesigned in an Apple-inspired style (clean, light, large type, tiles). Only the design language is borrowed — no Apple logos, product names, images or font files.
 
-## Known issues in the draft
+- Colours (tokens in `src/frontend/css/base.css`): white / light grey `#f5f5f7` / black tiles, text `#1d1d1f`, secondary text `#6e6e73`, accent blue `#0071e3` for buttons and `#0066cc` for links.
+- Font: system font stack (`system-ui, -apple-system, …`) — nothing loaded from third parties.
+- Global nav: 48px sticky, dark translucent bar with blur; name left, links right (Biografie · Portfolio · Kontakt); full-screen menu with a two-bar toggle below 834px.
+- Large centred headlines (hero 80px, sections 48px, semibold), section headlines with a grey second sentence ("Weitere Arbeiten. Ziehen, wischen, entdecken.").
+- Home page tiles: full-width and two-column tiles with 12px gaps, alternating light/dark (`.theme-dark`), text at the top and a full-bleed image below.
+- Pill buttons: filled (`.button`) and outlined (`.button--secondary`).
+- Breakpoints: 1068px and 734px (plus 834px for the nav); everything scrolls normally, no `overflow: hidden` on `body`.
+- Elements with `.reveal` fade/slide in on scroll; disabled with `prefers-reduced-motion`.
+- Gallery: click/touch-and-drag horizontal track with parallax (`object-position` animated alongside the track `transform`, 1200ms `animate()` with `fill: "forwards"`), plus horizontal scrolling (trackpad swipe, tilt wheel, Shift + wheel), keyboard (arrows, Home/End) and prev/next buttons. This interaction is the signature element of the site — keep it working when refactoring.
 
-Fix these when touching the relevant code (or when asked):
+## Known issues / open points
 
-1. **`sizeFitter.js` only runs on `resize`**, not on initial load — a page opened on a phone starts with the desktop layout.
-2. **`sizeFitter.js` crashes on `biography.html`**: there is no `#footer0`, so `footer.id = ...` throws on a null element.
-3. The mobile layout is done by swapping IDs in JS. Prefer CSS media queries (and classes instead of IDs for styling).
-4. `index.js` leaks globals (`maxDelta`, `nextPercentage` declared without `const`/`let` via comma lines that actually end in `;`).
-5. The image track only handles mouse events — **no touch support**, so the portfolio is not usable on phones/tablets. Use Pointer Events.
-6. The portfolio page has no mobile layout at all and `overflow: hidden` on `body` can cut off content on small screens (e.g. the long contact footer).
-7. Duplicate `<meta charset>` in every page; `<html>` lacks `lang="de"`; `</BR>` is invalid markup.
-8. Shared CSS is copy-pasted into three files.
-9. Alt texts are generic (`Image0`, `Profile picture`) — should describe the work.
-10. No keyboard access for the image track; no visible focus styles.
+- All copy, project titles, contact data and images are placeholders (see "Project").
+- Project tiles and gallery items are not clickable yet — there are no detail views.
+- Alt texts say "Platzhalterbild …"; replace with descriptions of the real work.
+- Images are JPEG only; no WebP/AVIF or `srcset` yet.
+- Nav/footer markup is duplicated across pages (see "File layout").
 
 ## Legal requirements (Germany)
 
-A German business/portfolio site needs an **Impressum** (§ 5 DDG) and a **Datenschutzerklärung** (GDPR), both reachable from every page (usually footer links). Neither exists yet. The "Hinweis" disclaimer on the contact page is an outdated boilerplate link disclaimer with no legal effect; it can be replaced by the Impressum. Don't write legal texts as if final — produce structured placeholders and tell the user they need to be checked/filled in by them.
+A German business/portfolio site needs an **Impressum** (§ 5 DDG) and a **Datenschutzerklärung** (GDPR), both reachable from every page. `impressum.html` and `datenschutz.html` exist as structured placeholders (bracketed fields, yellow "Entwurf" notice, `noindex`) and are linked from every footer. They must be filled in and legally checked by the user before the site goes live. Don't write legal texts as if final.
 
-Also: avoid embedding third-party resources that send visitor data (Google Fonts via CDN, external analytics, embeds) without telling the user — self-host fonts instead.
+Also: avoid embedding third-party resources that send visitor data (Google Fonts via CDN, external analytics, embeds) without telling the user — self-host fonts instead. If that changes, update section 4 of `datenschutz.html`.
 
 ## Roadmap / ideas for further development
 
 Not decided yet — confirm with the user before starting larger items:
 
-- Extract shared CSS into one stylesheet (e.g. `css/base.css`) plus small page-specific files; use CSS custom properties for colours/spacing.
-- Replace `sizeFitter.js` with media queries; make all pages responsive and scrollable where needed.
-- Pointer/touch + keyboard support for the image track; respect `prefers-reduced-motion`.
-- Portfolio detail views (lightbox or project pages with title, client, year, description).
-- Real content: biography, contact, projects, optimized images (WebP/AVIF, `srcset`, `loading="lazy"`, `width`/`height` attributes).
-- Impressum and Datenschutz pages; footer with links on every page.
-- SEO basics: unique `<title>` and `<meta name="description">` per page, Open Graph tags, `lang="de"`.
-- Possibly a `mailto:` link or contact form (a form needs a backend/service — ask first).
+- Portfolio detail views (lightbox or project pages with title, client, year, description); make tiles/gallery items link to them.
+- Real content: biography, contact, projects, optimized images (WebP/AVIF, `srcset`).
+- Open Graph tags per page.
+- `mailto:` / `tel:` links once real contact data exists; possibly a contact form (needs a backend/service — ask first).
+- Possibly a small build step or includes for the shared nav/footer (ask first — currently no tooling).
 
 ## Conventions
 
 - Keep it dependency-free and readable; small, focused files.
-- Use semantic HTML (`header`, `nav`, `main`, `footer`), relative paths, 4-space indentation (some lines currently use tabs — normalize when editing).
+- Use semantic HTML (`header`, `nav`, `main`, `footer`), relative paths, 4-space indentation, BEM-style class names (`block__element--modifier`); no IDs for styling.
 - Test changes in a browser at desktop and phone widths (≈375px) before calling them done.
 - Don't commit unless the user asks.
 
