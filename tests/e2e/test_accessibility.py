@@ -72,12 +72,30 @@ def test_form_fields_show_an_outline_on_focus(page: Page):
     assert css(page, "#contact-name", "outline-width") == "2px"
 
 
+def force_focus_visible(page: Page, selector):
+    """Puts an element into the :focus-visible state via the DevTools protocol (Chromium).
+
+    Whether a browser treats focus as "visible" is a heuristic (keyboard vs. mouse, window focus)
+    that differs between machines; forcing the state tests the CSS rule itself.
+    """
+    cdp = page.context.new_cdp_session(page)
+    cdp.send("DOM.enable")
+    cdp.send("CSS.enable")
+    root = cdp.send("DOM.getDocument")["root"]["nodeId"]
+    node = cdp.send("DOM.querySelector", {"nodeId": root, "selector": selector})["nodeId"]
+    cdp.send("CSS.forcePseudoState", {"nodeId": node, "forcedPseudoClasses": ["focus", "focus-visible"]})
+    return cdp
+
+
 def test_focus_ring_in_the_navigation_is_light(page: Page):
     page.goto("/index.html")
-    page.keyboard.press("Tab")  # skip link
-    page.keyboard.press("Tab")  # name / home link in the navigation
-    expect(page.locator(".global-nav__brand")).to_be_focused()
+    force_focus_visible(page, ".global-nav__brand")
+    assert css(page, ".global-nav__brand", "outline-style") == "solid"
     assert _parse(css(page, ".global-nav__brand", "outline-color")) == (255, 255, 255)
+
+    # Outside the navigation the ring stays accent blue.
+    force_focus_visible(page, ".tile--hero .button")
+    assert _parse(css(page, ".tile--hero .button", "outline-color")) == _parse(token(page, "--color-accent"))
 
 
 @pytest.mark.parametrize("motion", ["reduce", "no-preference"])

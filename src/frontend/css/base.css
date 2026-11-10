@@ -714,9 +714,11 @@ button {
         transition: none;
     }
 
+    /* No transitions at all. (Shortening them with transition-duration would give *every*
+       element a tiny transition on every property, since transition-property defaults to "all".) */
     *,
     *::before,
     *::after {
-        transition-duration: 0.01ms !important;
+        transition: none !important;
     }
 }
