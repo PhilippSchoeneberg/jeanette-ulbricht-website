@@ -11,9 +11,9 @@ Request body (JSON):
 
 | Field | Type | Rules |
 | --- | --- | --- |
-| `name` | string | required, 1–100 characters, single line |
-| `email` | string | required, valid e-mail address, max. 254 characters |
-| `subject` | string | optional, max. 150 characters, single line |
+| `name` | string | required, 1–100 characters, single line (no control characters or Unicode line breaks) |
+| `email` | string | required, valid e-mail address, max. 254 characters, only ASCII before the `@` (international domains are fine) |
+| `subject` | string | optional, max. 150 characters, single line (like `name`) |
 | `message` | string | required, 10–5000 characters |
 | `website` | string | honeypot, must be empty (hidden in the form) |
 

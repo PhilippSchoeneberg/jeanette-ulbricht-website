@@ -64,11 +64,36 @@ def test_invalid_fields_are_rejected(client, mailer, field, value):
 
 
 @pytest.mark.parametrize("field", ["name", "subject"])
-def test_header_injection_is_rejected(client, mailer, field):
-    response = client.post("/api/contact", json={**VALID, field: "Hallo\r\nBcc: victim@example.com"})
+@pytest.mark.parametrize(
+    "line_break",
+    ["\r\n", "\n", "\x0b", "\x0c", "\x85", " ", " "],
+    ids=["CRLF", "LF", "VT", "FF", "NEL", "LINE-SEPARATOR", "PARAGRAPH-SEPARATOR"],
+)
+def test_line_breaks_in_header_fields_are_rejected(client, mailer, field, line_break):
+    # Name and subject end up in e-mail headers. Unicode line breaks (e.g. pasted from another
+    # app) used to crash building the e-mail with a 500.
+    response = client.post("/api/contact", json={**VALID, field: f"Hallo{line_break}Bcc: victim@example.com"})
 
     assert response.status_code == 422
+    assert response.json()["detail"][0]["loc"][-1] == field
     assert mailer.sent == []
+
+
+def test_non_ascii_before_the_at_sign_is_rejected(client, mailer):
+    # Such addresses can't be put into the e-mail's Reply-To header (used to be a 500).
+    response = client.post("/api/contact", json={**VALID, "email": "jörg@example.de"})
+
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["loc"][-1] == "email"
+    assert mailer.sent == []
+
+
+@pytest.mark.parametrize("name", ["Jörg Müller", 'Er"ika <evil@example.com>', "Ελένη"])
+def test_unusual_names_and_international_domains_still_work(client, mailer, name):
+    response = client.post("/api/contact", json={**VALID, "name": name, "email": "erika@bücher.de"})
+
+    assert response.status_code == 200
+    assert len(mailer.sent) == 1
 
 
 def test_unknown_fields_are_rejected(client, mailer):

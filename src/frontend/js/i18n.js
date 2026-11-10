@@ -48,11 +48,21 @@
         root.dataset.language = language;
     }
 
+    // The language the visitor asked for last. Loading is asynchronous: a slower, older request
+    // must not overwrite a newer choice when it finally arrives.
+    let requested = language;
+    let latestRequest = 0;
+
     async function setLanguage(code, { save = false } = {}) {
         if (!SUPPORTED.includes(code)) code = DEFAULT;
+        requested = code;
+        const request = ++latestRequest;
         try {
-            fallback = await loadLocale(DEFAULT);
-            strings = await loadLocale(code);
+            const loadedFallback = await loadLocale(DEFAULT);
+            const loadedStrings = await loadLocale(code);
+            if (request !== latestRequest) return; // a newer choice was made meanwhile
+            fallback = loadedFallback;
+            strings = loadedStrings;
             language = code;
             applyTranslations();
             if (save) {
@@ -82,7 +92,8 @@
         },
     };
 
+    // Toggle from the language last asked for, not the one currently shown (it may still load).
     document.querySelector("[data-language-toggle]")?.addEventListener("click", () => {
-        setLanguage(language === "de" ? "en" : "de", { save: true });
+        setLanguage(requested === "de" ? "en" : "de", { save: true });
     });
 })();
