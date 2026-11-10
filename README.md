@@ -36,4 +36,4 @@ runs both on every pull request into
 - [Architecture](doc/architecture.md)
 - [API](doc/api.md)
 - [Development](doc/development.md)
-- [Deployment](doc/deployment.md)
+- [Deployment](doc/deployment.md) (Docker on the server, behind Caddy)

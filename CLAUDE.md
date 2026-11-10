@@ -52,6 +52,7 @@ Don't introduce a frontend framework, bundler or npm dependencies, or new Python
 | `src/backend/` | FastAPI app: `main.py` (entry), `app.py` (factory, static mount, middlewares), `config.py` (env settings, `APP_ENV`), `routers/contact.py`, `schemas.py`, `mailer.py` (SMTP / console), `rate_limit.py`, `security.py` (body size limit, security headers / CSP) |
 | `tests/` | pytest: API/translation tests (`test_*.py`, `conftest.py`), shared `fakes.py` (fake mailer) |
 | `tests/e2e/` | Playwright browser tests; `conftest.py` starts the app with uvicorn on a free port (fake mailer) |
+| `Dockerfile`, `compose.yaml`, `.dockerignore` | Production container (arm64 Oracle server behind a separate Caddy proxy on the external network `web`; no published ports, `APP_ENV=production`, uvicorn with `--proxy-headers`). See `doc/deployment.md` |
 | `pyproject.toml`, `uv.lock`, `.env.example` | Python dependencies (uv), pytest and ruff config; lock file; config template |
 | `doc/` | Architecture, development and deployment docs |
 | `.claude/launch.json` | Local preview config (runs the FastAPI app with uvicorn on port 8000; needs `.venv`) |

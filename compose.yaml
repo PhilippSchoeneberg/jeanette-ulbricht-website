@@ -1,0 +1,46 @@
+# Production setup on the server (see doc/deployment.md): `docker compose up -d --build`.
+#
+# No `ports:` on purpose: the app is only reachable over the external Docker network "web",
+# through the separate Caddy reverse proxy (/opt/proxy), which serves it over HTTPS only.
+# Caddy finds it by its container name: reverse_proxy jeanette-ulbricht-website:8000
+#
+# The app stores no data (contact messages are e-mailed, not saved), so there is no volume.
+
+services:
+  app:
+    build: .
+    image: jeanette-ulbricht-website:latest
+    container_name: jeanette-ulbricht-website
+    restart: unless-stopped
+
+    # Mail settings and other secrets; never committed (see .env.example).
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      # Always production in the container, whatever .env says: a mail server is required and
+      # the API docs are off.
+      APP_ENV: production
+
+    networks:
+      - web
+
+    # Hardening: the app writes nothing to disk and needs no special privileges.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  web:
+    external: true

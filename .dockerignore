@@ -1,0 +1,17 @@
+# Only pyproject.toml, uv.lock and src/ are needed for the image (see Dockerfile).
+# Never send secrets, local environments or caches to the Docker build.
+.env
+.env.*
+!.env.example
+.venv/
+.git/
+.github/
+.claude/
+.idea/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+test-results/
+tests/
+doc/
+*.md
