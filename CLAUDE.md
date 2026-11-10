@@ -8,7 +8,7 @@ Portfolio homepage for **Jeanette Ulbricht**, a media designer (Mediengestalteri
 
 The site is a **draft**: structure and design are in place, content is placeholder. Improving structure is welcome as long as the visual identity (see below) is kept unless the user asks otherwise.
 
-- Site language: **German** (navigation, headings, copy). Code, comments and commit messages: English.
+- Site language: **German** (navigation, headings, copy), with an **English translation** via a language switch. German stays in the HTML; every translatable text needs a `data-i18n` / `data-i18n-<attr>` key with identical German in `locales/de.json` and English in `locales/en.json` (`tests/test_locales.py` enforces this). Impressum and Datenschutz content stays German only. Code, comments and commit messages: English.
 - Author/maintainer: Philipp Schöneberg (`<meta name="author">`).
 - Placeholder content everywhere: Lorem-ipsum biography, masked e-mail/phone, stock example images. Never invent real contact data, biography facts or project descriptions; leave clear placeholders and ask.
 
@@ -40,6 +40,7 @@ Don't introduce a frontend framework, bundler or npm dependencies, or new Python
 | `src/frontend/contact.html` / `css/contact.css` / `js/contact-form.js` | Contact cards (e-mail, phone) and contact form (client-side validation, sends JSON to `/api/contact`) |
 | `src/frontend/impressum.html`, `datenschutz.html` / `css/legal.css` | Legal pages — **draft placeholders only**, marked "nicht veröffentlichen" |
 | `src/frontend/css/base.css` | Design tokens (CSS custom properties), reset, typography, buttons, global nav, footer, shared components (page hero, sections, cards, scroll reveal) |
+| `src/frontend/js/i18n.js`, `src/frontend/locales/{de,en}.json` | Language switching (German/English): `data-i18n` keys in the HTML, `window.i18n.t()` for script texts, `languagechange` event |
 | `src/frontend/js/main.js` | Light/dark theme toggle, mobile navigation menu, scroll-reveal (IntersectionObserver); loaded on every page |
 | `src/frontend/js/gallery.js` | Draggable image track with parallax (Pointer Events, horizontal wheel/trackpad, keyboard, prev/next buttons) |
 | `src/frontend/assets/favicon.ico` | Favicon |

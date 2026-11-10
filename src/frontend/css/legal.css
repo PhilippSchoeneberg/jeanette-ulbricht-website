@@ -42,3 +42,14 @@
     display: block;
     margin-bottom: 4px;
 }
+
+/* Shown only in other languages: these pages are German only */
+.legal-language-note {
+    margin-bottom: 16px;
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.legal-language-note:empty {
+    display: none;
+}

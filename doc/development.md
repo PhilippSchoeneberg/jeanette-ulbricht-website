@@ -45,7 +45,13 @@ keyboard; for the contact page, send a test message (it appears in the server co
 
 ## Content
 
-All texts, contact data and images are placeholders. Don't invent real content: biography,
+All texts, contact data and images are placeholders.
+
+Texts are German in the HTML and in `src/frontend/locales/de.json`, English in `en.json`. When
+adding or changing a text: give the element a `data-i18n` key (or `data-i18n-<attribute>` for
+attributes like `alt`), put the same German text into `de.json` and the English one into
+`en.json`, then run the tests: they report missing, unused or mismatched keys.
+ Don't invent real content: biography,
 projects and contact data come from Jeanette Ulbricht.
 
 Images live in `src/frontend/assets/images/`. Scale photos to about 1600px height before adding

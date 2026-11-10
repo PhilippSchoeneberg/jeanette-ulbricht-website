@@ -18,12 +18,21 @@
         }
     }
 
+    // Texts come from js/i18n.js; the German label in the HTML is used until it has loaded.
+    function updateLabel() {
+        if (!button || !window.i18n) return;
+        const key = root.dataset.theme === "dark" ? "theme_to_light" : "theme_to_dark";
+        const label = window.i18n.t(key);
+        if (label !== key) button.setAttribute("aria-label", label);
+    }
+
     function applyTheme(theme) {
         root.dataset.theme = theme;
-        button?.setAttribute("aria-label", theme === "dark" ? "Helles Design aktivieren" : "Dunkles Design aktivieren");
+        updateLabel();
     }
 
     applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
+    document.addEventListener("languagechange", updateLabel);
 
     button?.addEventListener("click", () => {
         const next = root.dataset.theme === "dark" ? "light" : "dark";
@@ -51,14 +60,21 @@
     const toggle = nav?.querySelector("[data-nav-toggle]");
     const desktopQuery = window.matchMedia("(min-width: 834px)");
 
+    function updateMenuLabel() {
+        const key = nav.classList.contains("is-open") ? "menu_close" : "menu_open";
+        const label = window.i18n?.t(key);
+        if (label && label !== key) toggle.setAttribute("aria-label", label);
+    }
+
     function setMenuOpen(open) {
         nav.classList.toggle("is-open", open);
         toggle.setAttribute("aria-expanded", String(open));
-        toggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+        updateMenuLabel();
         document.body.classList.toggle("nav-open", open);
     }
 
     if (nav && toggle) {
+        document.addEventListener("languagechange", updateMenuLabel);
         toggle.addEventListener("click", () => {
             setMenuOpen(!nav.classList.contains("is-open"));
         });

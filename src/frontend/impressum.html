@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Impressum – Jeanette Ulbricht, Mediengestalterin</title>
-    <meta name="description" content="Impressum der Website von Jeanette Ulbricht, Mediengestalterin.">
+    <title data-i18n="title_imprint">Impressum – Jeanette Ulbricht, Mediengestalterin</title>
+    <meta name="description" content="Impressum der Website von Jeanette Ulbricht, Mediengestalterin." data-i18n-content="description_imprint">
     <meta name="author" content="Philipp Schöneberg">
     <meta name="robots" content="noindex">
     <link rel="icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/legal.css">
     <script>
-        // Runs before first paint: enable JS styles and apply the saved or system colour theme.
+        // Runs before first paint: enable JS styles, apply the saved or system colour theme and pick the language.
         (function () {
             var root = document.documentElement, theme = null;
             root.classList.add("js");
@@ -20,38 +20,61 @@
                 theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
             }
             root.dataset.theme = theme;
+
+            var language = null;
+            try { language = localStorage.getItem("language"); } catch (e) {}
+            if (language !== "de" && language !== "en") {
+                language = "de";
+                var preferred = navigator.languages || [navigator.language];
+                for (var i = 0; i < preferred.length; i++) {
+                    var code = String(preferred[i] || "").slice(0, 2).toLowerCase();
+                    if (code === "de" || code === "en") { language = code; break; }
+                }
+            }
+            root.dataset.language = language;
+            if (language !== "de") {
+                // Hide the German page until js/i18n.js has applied the translation.
+                root.classList.add("i18n-loading");
+                setTimeout(function () { root.classList.remove("i18n-loading"); }, 1500);
+            }
         })();
     </script>
+    <script src="js/i18n.js" defer></script>
     <script src="js/main.js" defer></script>
 </head>
 <body>
-    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main" data-i18n="skip_link">Zum Inhalt springen</a>
 
     <header class="global-nav" data-nav>
-        <nav class="global-nav__inner" aria-label="Hauptnavigation">
+        <nav class="global-nav__inner" aria-label="Hauptnavigation" data-i18n-aria-label="nav_label">
             <a class="global-nav__brand" href="index.html">Jeanette Ulbricht</a>
             <button class="global-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen" data-nav-toggle>
                 <span class="global-nav__toggle-bar"></span>
                 <span class="global-nav__toggle-bar"></span>
             </button>
             <ul class="global-nav__menu" id="nav-menu">
-                <li><a href="biography.html">Biografie</a></li>
-                <li><a href="index.html">Portfolio</a></li>
-                <li><a href="contact.html">Kontakt</a></li>
+                <li><a href="biography.html" data-i18n="nav_biography">Biografie</a></li>
+                <li><a href="index.html" data-i18n="nav_portfolio">Portfolio</a></li>
+                <li><a href="contact.html" data-i18n="nav_contact">Kontakt</a></li>
             </ul>
-            <button class="theme-toggle" type="button" aria-label="Dunkles Design aktivieren" data-theme-toggle>
-                <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-                <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </button>
+            <div class="global-nav__actions">
+                <button class="language-toggle" type="button" lang="en" aria-label="Switch to English" data-language-toggle data-i18n="language_switch_code" data-i18n-lang="language_switch_lang" data-i18n-aria-label="language_switch_label">EN</button>
+                <button class="theme-toggle" type="button" aria-label="Dunkles Design aktivieren" data-theme-toggle>
+                    <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                    <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
         </nav>
     </header>
 
     <main id="main">
         <header class="page-hero">
-            <h1 class="headline-hero">Impressum.</h1>
+            <h1 class="headline-hero" data-i18n="imprint_title">Impressum.</h1>
         </header>
 
-        <article class="legal">
+        <article class="legal" lang="de">
+            <!-- Shown in other languages only: this page is German only -->
+            <p class="legal-language-note" data-i18n="legal_german_only"></p>
             <!-- DRAFT: structure only. Must be completed and legally checked before going live. -->
             <p class="legal-notice">
                 <strong>Entwurf – nicht veröffentlichen</strong>
@@ -85,18 +108,18 @@
 
     <footer class="global-footer">
         <div class="global-footer__inner">
-            <nav class="global-footer__nav" aria-label="Fußzeile">
+            <nav class="global-footer__nav" aria-label="Fußzeile" data-i18n-aria-label="footer_label">
                 <ul>
-                    <li><a href="biography.html">Biografie</a></li>
-                    <li><a href="index.html">Portfolio</a></li>
-                    <li><a href="contact.html">Kontakt</a></li>
+                    <li><a href="biography.html" data-i18n="nav_biography">Biografie</a></li>
+                    <li><a href="index.html" data-i18n="nav_portfolio">Portfolio</a></li>
+                    <li><a href="contact.html" data-i18n="nav_contact">Kontakt</a></li>
                 </ul>
             </nav>
             <div class="global-footer__legal">
-                <p>Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
+                <p data-i18n="footer_copyright">Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
                 <ul class="global-footer__legal-links">
-                    <li><a href="impressum.html" aria-current="page">Impressum</a></li>
-                    <li><a href="datenschutz.html">Datenschutz</a></li>
+                    <li><a href="impressum.html" aria-current="page" data-i18n="footer_imprint">Impressum</a></li>
+                    <li><a href="datenschutz.html" data-i18n="footer_privacy">Datenschutz</a></li>
                 </ul>
             </div>
         </div>
