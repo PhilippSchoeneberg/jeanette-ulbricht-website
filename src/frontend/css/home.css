@@ -18,7 +18,7 @@
     min-height: 580px;
     overflow: hidden;
     padding-top: 52px;
-    background-color: var(--color-bg-alt);
+    background-color: var(--color-tile);
     color: var(--color-text);
     text-align: center;
 }
@@ -34,7 +34,7 @@
 }
 
 .tile.theme-dark {
-    background-color: var(--color-bg-dark);
+    background-color: var(--color-tile-dark);
     color: var(--color-text-on-dark);
 }
 

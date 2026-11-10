@@ -1,4 +1,50 @@
-// Shared behaviour for every page: mobile navigation and scroll reveal.
+// Shared behaviour for every page: colour theme toggle, mobile navigation and
+// scroll reveal.
+
+// Colour theme. The inline script in each page's <head> sets the initial
+// data-theme (saved choice, otherwise the system preference) before first paint.
+(() => {
+    const root = document.documentElement;
+    const button = document.querySelector("[data-theme-toggle]");
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const STORAGE_KEY = "theme";
+
+    function savedTheme() {
+        try {
+            const theme = localStorage.getItem(STORAGE_KEY);
+            return theme === "light" || theme === "dark" ? theme : null;
+        } catch {
+            return null;
+        }
+    }
+
+    function applyTheme(theme) {
+        root.dataset.theme = theme;
+        button?.setAttribute("aria-label", theme === "dark" ? "Helles Design aktivieren" : "Dunkles Design aktivieren");
+    }
+
+    applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
+
+    button?.addEventListener("click", () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try {
+            localStorage.setItem(STORAGE_KEY, next);
+        } catch {
+            // Storage unavailable (e.g. blocked): the choice lasts for this page only.
+        }
+    });
+
+    // Follow system changes as long as the visitor hasn't chosen a theme.
+    systemDark.addEventListener("change", event => {
+        if (!savedTheme()) applyTheme(event.matches ? "dark" : "light");
+    });
+
+    // Keep other open tabs of the site in sync.
+    window.addEventListener("storage", event => {
+        if (event.key === STORAGE_KEY && savedTheme()) applyTheme(savedTheme());
+    });
+})();
 
 (() => {
     const nav = document.querySelector("[data-nav]");
