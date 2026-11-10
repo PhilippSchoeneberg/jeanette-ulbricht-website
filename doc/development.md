@@ -1,21 +1,47 @@
 # Development
 
-## Run
+## Setup
 
-Requires only Python 3 (for a local web server). From the repository root:
+Requires Python 3.11 or newer.
 
 ```bash
-python3 -m http.server 8000 --directory src/frontend
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+cp .env.example .env
 ```
 
-Open http://127.0.0.1:8000. There is no build step: edit files in `src/frontend` and reload the
-page. Opening the HTML files directly also works, but a server is closer to the real hosting.
+For local development, leave `SMTP_HOST` in `.env` empty: contact form messages are then printed
+to the server console instead of being sent. To test real sending, fill in the SMTP settings
+(see `.env.example`).
+
+## Run
+
+From the repository root:
+
+```bash
+.venv/bin/uvicorn src.backend.main:app --reload
+```
+
+Open http://127.0.0.1:8000. The API docs are at http://127.0.0.1:8000/api/docs.
+
+The frontend has no build step: edit files in `src/frontend` and reload the page. Without the
+backend (e.g. `python3 -m http.server 8000 --directory src/frontend`) all pages work except
+sending the contact form.
+
+## Tests
+
+```bash
+.venv/bin/pytest
+```
+
+The tests run the real FastAPI app with a fake mailer, so they need no mail server and no `.env`.
 
 ## Check before committing
 
-There are no automated tests. Check changes in a browser at desktop width and at phone width
-(about 375px), on every page you touched. For the portfolio page, also check that the gallery
-can be dragged, scrolled sideways and moved with the keyboard.
+Run the tests. The frontend has no automated tests: check changes in a browser at desktop width
+and at phone width (about 375px), in light and dark mode, on every page you touched. For the
+portfolio page, also check that the gallery can be dragged, scrolled sideways and moved with the
+keyboard; for the contact page, send a test message (it appears in the server console).
 
 ## Content
 

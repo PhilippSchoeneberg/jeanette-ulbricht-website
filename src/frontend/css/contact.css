@@ -34,3 +34,135 @@
         font-size: 21px;
     }
 }
+
+/* Contact form (behaviour in js/contact-form.js)
+   ========================================================================== */
+
+.contact-form-wrapper {
+    max-width: 780px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field__label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-field__optional {
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.form-field__input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background-color: var(--color-input-bg);
+    color: var(--color-text);
+    font: inherit;
+    letter-spacing: inherit;
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.form-field__input:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+.form-field__input--textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.form-field__input[aria-invalid="true"] {
+    border-color: var(--color-error);
+}
+
+.form-field__input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-error) 25%, transparent);
+}
+
+.form-field__error {
+    min-height: 0;
+    color: var(--color-error);
+    font-size: 14px;
+}
+
+.form-field__error:empty {
+    display: none;
+}
+
+/* Visually hidden honeypot field (still in the DOM for bots) */
+.form-honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.contact-form__privacy {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+}
+
+.contact-form__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+}
+
+.contact-form__submit {
+    cursor: pointer;
+}
+
+.contact-form__submit:disabled {
+    cursor: progress;
+    opacity: 0.6;
+}
+
+.form-status {
+    font-size: 15px;
+}
+
+.form-status:empty {
+    display: none;
+}
+
+.form-status--success {
+    color: var(--color-success);
+}
+
+.form-status--error {
+    color: var(--color-error);
+}
+
+@media (max-width: 734px) {
+    .form-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .contact-form__submit {
+        width: 100%;
+    }
+}
