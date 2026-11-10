@@ -1,0 +1,88 @@
+/* Biography page: portrait with text, focus areas and career timeline. */
+
+.about {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: 64px;
+}
+
+.about__portrait img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card);
+    object-fit: cover;
+}
+
+.about__lead {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: 0.007em;
+}
+
+.about__text p + p {
+    margin-top: 1em;
+}
+
+.about__text .button-row {
+    justify-content: flex-start;
+    margin-top: 32px;
+}
+
+/* Career timeline */
+.timeline {
+    border-top: 1px solid var(--color-border);
+}
+
+.timeline__item {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.timeline__year {
+    color: var(--color-text-secondary);
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.timeline__title {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.19;
+}
+
+.timeline__text {
+    margin-top: 4px;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 834px) {
+    .about {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+    }
+
+    .about__portrait {
+        max-width: 420px;
+    }
+}
+
+@media (max-width: 734px) {
+    .about__lead {
+        font-size: 24px;
+    }
+
+    .timeline__item {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
+
+    .timeline__year {
+        font-size: 17px;
+    }
+}

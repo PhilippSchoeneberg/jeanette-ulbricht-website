@@ -1,0 +1,44 @@
+/* Legal pages (Impressum, Datenschutz): narrow reading column. */
+
+.legal {
+    max-width: 692px;
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--section-space);
+}
+
+.legal h2 {
+    margin: 48px 0 12px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.17;
+}
+
+.legal h3 {
+    margin: 24px 0 8px;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.legal p + p,
+.legal p + ul,
+.legal ul + p {
+    margin-top: 12px;
+}
+
+.legal ul {
+    padding-left: 1.2em;
+    list-style: disc;
+}
+
+.legal-notice {
+    padding: 20px 24px;
+    border-radius: var(--radius-card);
+    background-color: #fff4ce;
+    color: #5c4400;
+    font-size: 15px;
+}
+
+.legal-notice strong {
+    display: block;
+    margin-bottom: 4px;
+}
