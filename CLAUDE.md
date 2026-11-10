@@ -16,16 +16,18 @@ The site is a **draft**: structure and design are in place, content is placehold
 
 - Frontend: **HTML, CSS, vanilla JavaScript** — no build step, no framework, no npm.
 - Backend: **Python 3.11+ with FastAPI** (`src/backend`). It serves the frontend as static files and provides `POST /api/contact`, which e-mails contact form messages via SMTP (nothing is stored). Dependencies are managed with **uv** (as in FormelX): declared in `pyproject.toml` (`[dependency-groups] dev` for test tools), pinned in `uv.lock` — commit both, add packages with `uv add` / `uv add --dev` (ask the user first). Structure follows the user's FormelX project (`create_app(settings)` factory, settings from `.env`).
-- Tests: pytest for the backend (`tests/`, fake mailer, no mail server needed). No frontend tests.
+- Tests: pytest (`tests/`, fake mailer, no mail server needed) — API and translation tests in `tests/test_*.py`, browser tests with Playwright (`pytest-playwright`, headless Chromium) in `tests/e2e/` covering the gallery, theme toggle, language switch, mobile nav and contact form. Update the browser tests when changing that behaviour; `pytest -m "not e2e"` skips them.
 - Lint/format: ruff (config under `[tool.ruff]` in `pyproject.toml`): `uv run ruff check .` and `uv run ruff format .` — two blank lines after imports (house style).
 
 Setup and run from the repository root:
 
 ```bash
 uv sync
+uv run playwright install chromium     # browser for tests/e2e (once)
 cp .env.example .env     # SMTP_HOST empty = contact messages printed to the console
 uv run uvicorn src.backend.main:app --reload
-uv run pytest
+uv run pytest                          # all tests; -m "not e2e" skips the browser tests
+uv run pytest tests/e2e --headed       # watch the browser tests
 ```
 
 Project documentation lives in `doc/` (architecture, api, development, deployment) and the `README.md`. Keep them in sync when changing structure, API, workflow or run commands.
@@ -48,7 +50,8 @@ Don't introduce a frontend framework, bundler or npm dependencies, or new Python
 | `src/frontend/assets/images/exampleSet0/` | Profile picture placeholder |
 | `src/frontend/assets/images/exampleSet1/` | Portfolio placeholder images (`image0–7.jpg`, 1600px high) |
 | `src/backend/` | FastAPI app: `main.py` (entry), `app.py` (factory, static mount), `config.py` (env settings), `routers/contact.py`, `schemas.py`, `mailer.py` (SMTP / console), `rate_limit.py` |
-| `tests/` | pytest tests for the backend |
+| `tests/` | pytest: API/translation tests (`test_*.py`, `conftest.py`), shared `fakes.py` (fake mailer) |
+| `tests/e2e/` | Playwright browser tests; `conftest.py` starts the app with uvicorn on a free port (fake mailer) |
 | `pyproject.toml`, `uv.lock`, `.env.example` | Python dependencies (uv), pytest and ruff config; lock file; config template |
 | `doc/` | Architecture, development and deployment docs |
 | `.claude/launch.json` | Local preview config (runs the FastAPI app with uvicorn on port 8000; needs `.venv`) |
@@ -108,4 +111,4 @@ Not decided yet — confirm with the user before starting larger items:
 - Feature branches merge into `development` (via pull request); `development` merges into `main` for a release.
 - Pull requests for features target `development`, not `main`.
 - If uncommitted work is found on `main` or `development`, move it to a feature branch before committing.
-- CI: `.github/workflows/tests.yml` installs with `uv sync --frozen`, checks `uv lock --check`, runs `ruff check`, `ruff format --check` and `pytest` (job/check name `tests`, Python 3.11) on pull requests into and pushes to `development`/`main`. The GitHub rulesets for both branches require the `tests` check, so PRs can't be merged with failing tests. Run `uv run pytest` and ruff before pushing; don't rename the job without updating the rulesets.
+- CI: `.github/workflows/tests.yml` installs with `uv sync --frozen`, checks `uv lock --check`, runs `ruff check`, `ruff format --check`, installs Chromium and runs `pytest` incl. browser tests (job/check name `tests`, Python 3.11) on pull requests into and pushes to `development`/`main`. The GitHub rulesets for both branches require the `tests` check, so PRs can't be merged with failing tests. Run `uv run pytest` and ruff before pushing; don't rename the job without updating the rulesets.

@@ -26,7 +26,9 @@ uv run uvicorn src.backend.main:app --reload
 
 Then open http://127.0.0.1:8000.
 
-Run the tests with `uv run pytest` and the linter with `uv run ruff check .`. GitHub Actions runs both on every pull request into
+Run the tests with `uv run pytest` and the linter with `uv run ruff check .`. The browser tests
+(Playwright, `tests/e2e`) need Chromium once: `uv run playwright install chromium`. GitHub Actions
+runs both on every pull request into
 `development` or `main`; merging requires them to pass (see [Development](doc/development.md#continuous-integration)).
 
 ## Documentation

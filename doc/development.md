@@ -6,7 +6,8 @@ Requires [uv](https://docs.astral.sh/uv/) (`brew install uv`) and Python 3.11 or
 install it).
 
 ```bash
-uv sync               # creates .venv with all dependencies from uv.lock
+uv sync                                # creates .venv with all dependencies from uv.lock
+uv run playwright install chromium     # browser for the browser tests (once, ~150 MB)
 cp .env.example .env
 ```
 
@@ -41,11 +42,26 @@ uv lock --upgrade             # update everything within the declared ranges
 
 ## Tests
 
+The tests run the real FastAPI app with a fake mailer, so they need no mail server and no `.env`.
+
+- `tests/test_*.py`: API and translation tests (fast, no browser).
+- `tests/e2e/`: browser tests with [Playwright](https://playwright.dev/python/)
+  (`pytest-playwright`). They start the app with uvicorn on a free local port and drive headless
+  Chromium through the main flows: gallery (drag, keyboard, prev/next buttons, parallax), theme
+  toggle, language switch, mobile menu at 375px and the contact form (field errors, successful
+  send, rate limit, mail error). Each test gets a fresh browser (empty `localStorage`), German,
+  light mode and reduced motion, so animations finish instantly.
+
 ```bash
-uv run pytest
+uv run pytest                          # everything
+uv run pytest -m "not e2e"             # without the browser tests
+uv run pytest tests/e2e --headed       # watch the browser
+uv run pytest tests/e2e --headed --slowmo 500
 ```
 
-The tests run the real FastAPI app with a fake mailer, so they need no mail server and no `.env`.
+The browser tests need Chromium (`uv run playwright install chromium`); without it they fail
+with "Executable doesn't exist". On failure, `--tracing retain-on-failure` saves a trace to
+`test-results/` that `uv run playwright show-trace <file>` opens.
 
 ## Linting and formatting
 
@@ -59,11 +75,11 @@ uv run ruff format .         # format
 
 ## Check before committing
 
-Run the tests and ruff (`uv run ruff check .` and `uv run ruff format --check .`). The frontend has no
-automated tests: check changes in a browser at desktop width
-and at phone width (about 375px), in light and dark mode, on every page you touched. For the
-portfolio page, also check that the gallery can be dragged, scrolled sideways and moved with the
-keyboard; for the contact page, send a test message (it appears in the server console).
+Run the tests, including the browser tests, and ruff (`uv run ruff check .` and
+`uv run ruff format --check .`). The tests cover the main flows, but not the look: check changes
+in a browser at desktop width and at phone width (about 375px), in light and dark mode, on every
+page you touched. Add or adjust a test in `tests/e2e` when you change gallery, navigation, theme,
+language or contact form behaviour.
 
 ## Content
 
@@ -91,8 +107,8 @@ them (for example with `sips --resampleHeight 1600` on macOS) and set `width` / 
 ## Continuous integration
 
 `.github/workflows/tests.yml` installs the locked dependencies with uv, checks that `uv.lock` is up
-to date, and runs `ruff check`, `ruff format --check` and `pytest` on GitHub Actions (Python 3.11,
-the oldest supported version):
+to date, runs `ruff check` and `ruff format --check`, installs Chromium and runs `pytest` (API and
+browser tests) on GitHub Actions (Python 3.11, the oldest supported version):
 
 - on every pull request into `development` or `main`,
 - after every merge (push) into `development` or `main`,

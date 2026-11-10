@@ -17,6 +17,9 @@ dev = [
     # Used by FastAPI's TestClient.
     "httpx>=0.28.1",
     "ruff>=0.8.4",
+    # Browser tests (tests/e2e). Also needs the browser once: `uv run playwright install chromium`
+    "pytest-playwright>=0.10.0",
+    "playwright>=1.65.0",
 ]
 
 [tool.uv]
@@ -26,6 +29,7 @@ package = false
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = ['e2e: browser tests with Playwright (tests/e2e); skip them with -m "not e2e"']
 
 # Python linting and formatting (https://docs.astral.sh/ruff/):
 #   uv run ruff check .   and   uv run ruff format .
@@ -46,3 +50,5 @@ select = [
 [tool.ruff.lint.isort]
 # House style (as in FormelX): two blank lines between imports and code.
 lines-after-imports = 2
+# Our own packages, imported as src.* and tests.* from the repository root.
+known-first-party = ["src", "tests"]
