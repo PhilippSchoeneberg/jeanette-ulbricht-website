@@ -44,14 +44,17 @@ def test_whitespace_is_trimmed(client, mailer):
     assert mailer.sent[0]["Reply-To"] == "Erika <erika@example.org>"
 
 
-@pytest.mark.parametrize("field, value", [
-    ("name", ""),
-    ("name", "x" * 101),
-    ("email", "not-an-address"),
-    ("message", "zu kurz"),
-    ("message", "x" * 5001),
-    ("subject", "x" * 151),
-])
+@pytest.mark.parametrize(
+    "field, value",
+    [
+        ("name", ""),
+        ("name", "x" * 101),
+        ("email", "not-an-address"),
+        ("message", "zu kurz"),
+        ("message", "x" * 5001),
+        ("subject", "x" * 151),
+    ],
+)
 def test_invalid_fields_are_rejected(client, mailer, field, value):
     response = client.post("/api/contact", json={**VALID, field: value})
 
@@ -114,6 +117,15 @@ def test_rate_limiter_window_expires():
     assert limiter.allow("5.6.7.8")
     now[0] += 61
     assert limiter.allow("1.2.3.4")
+
+
+def test_api_docs_describe_all_responses(client):
+    schema = client.get("/api/openapi.json").json()
+    responses = schema["paths"]["/api/contact"]["post"]["responses"]
+
+    assert set(responses) == {"200", "422", "429", "502"}
+    error_schema = schema["components"]["schemas"]["ErrorResponse"]["properties"]["detail"]
+    assert set(error_schema["enum"]) == {"rate_limited", "mail_error"}
 
 
 def test_frontend_is_served(client):

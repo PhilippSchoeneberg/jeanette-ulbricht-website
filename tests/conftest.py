@@ -2,10 +2,10 @@
 
 import pytest
 from fastapi.testclient import TestClient
-from tests.fakes import FakeMailer
 
 from src.backend.app import create_app
 from src.backend.config import Settings
+from tests.fakes import FakeMailer
 
 
 SETTINGS = Settings(contact_recipient="jeanette@example.com", contact_sender="website@example.com")

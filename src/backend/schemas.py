@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
@@ -21,4 +23,10 @@ class ContactRequest(BaseModel):
 
 
 class ContactResponse(BaseModel):
-    status: str
+    status: Literal["sent"]
+
+
+class ErrorResponse(BaseModel):
+    """Body of the 429 and 502 responses (validation errors use FastAPI's default 422 body)."""
+
+    detail: Literal["rate_limited", "mail_error"]

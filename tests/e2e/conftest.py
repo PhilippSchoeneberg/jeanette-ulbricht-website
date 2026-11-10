@@ -14,10 +14,10 @@ from pathlib import Path
 
 import pytest
 import uvicorn
-from tests.fakes import FakeMailer
 
 from src.backend.app import create_app
 from src.backend.config import FRONTEND_DIR, Settings
+from tests.fakes import FakeMailer
 
 
 E2E_DIR = Path(__file__).parent

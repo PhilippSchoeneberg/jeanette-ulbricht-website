@@ -27,5 +27,8 @@ Responses:
 | 429 | `{"detail": "rate_limited"}` | More than 5 messages from this IP within 15 minutes |
 | 502 | `{"detail": "mail_error"}` | The mail server could not be reached or refused the message |
 
+All responses, including the 429 and 502 error bodies, are declared as Pydantic models, so
+`/api/docs` shows their exact shape.
+
 The e-mail goes from `CONTACT_SENDER` to `CONTACT_RECIPIENT`, with the visitor's name and
 address as `Reply-To`, so replying in the mail program answers the visitor directly.

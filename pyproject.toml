@@ -1,0 +1,54 @@
+[project]
+name = "jeanette-ulbricht-website"
+version = "0.1.0"
+description = "Portfolio website for media designer Jeanette Ulbricht, with a FastAPI backend for the contact form."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.6",
+    "uvicorn[standard]>=0.34.0",
+    "email-validator>=2.2.0",
+    "python-dotenv>=1.0.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    # Used by FastAPI's TestClient.
+    "httpx>=0.28.1",
+    "ruff>=0.8.4",
+    # Browser tests (tests/e2e). Also needs the browser once: `uv run playwright install chromium`
+    "pytest-playwright>=0.10.0",
+    "playwright>=1.65.0",
+]
+
+[tool.uv]
+# This is an application, not a library: install the dependencies, not the project itself.
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = ['e2e: browser tests with Playwright (tests/e2e); skip them with -m "not e2e"']
+
+# Python linting and formatting (https://docs.astral.sh/ruff/):
+#   uv run ruff check .   and   uv run ruff format .
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes (unused imports/variables, undefined names)
+    "I",       # import sorting
+    "B",       # bugbear (likely bugs)
+    "UP",      # pyupgrade (modern syntax for the target version)
+    "SIM",     # simplifications
+]
+
+[tool.ruff.lint.isort]
+# House style (as in FormelX): two blank lines between imports and code.
+lines-after-imports = 2
+# Our own packages, imported as src.* and tests.* from the repository root.
+known-first-party = ["src", "tests"]

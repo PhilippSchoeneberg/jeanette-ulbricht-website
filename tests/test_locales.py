@@ -30,14 +30,14 @@ class TranslatableElements(HTMLParser):
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.entries = []   # (key, value, description)
-        self._open = []     # stack of [tag, key, collected text]
+        self.entries = []  # (key, value, description)
+        self._open = []  # stack of [tag, key, collected text]
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         for name, key in attrs.items():
             if name.startswith(ATTRIBUTE_PREFIX):
-                attribute = name[len(ATTRIBUTE_PREFIX):]
+                attribute = name[len(ATTRIBUTE_PREFIX) :]
                 self.entries.append((key, attrs.get(attribute), f"<{tag} {attribute}>"))
         if tag in self.VOID:
             return
