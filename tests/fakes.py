@@ -13,4 +13,6 @@ class FakeMailer:
     def send(self, message):
         if self.fail:
             raise MailError("simulated failure")
+        # Serialize like a real SMTP send, so messages that can't be encoded fail here too.
+        message.as_bytes()
         self.sent.append(message)

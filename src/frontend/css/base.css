@@ -722,3 +722,12 @@ button {
         transition: none !important;
     }
 }
+
+/* Print everything: blocks that fade in on scroll would otherwise stay invisible on paper. */
+@media print {
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

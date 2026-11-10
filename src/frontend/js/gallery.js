@@ -68,6 +68,13 @@
     viewport.addEventListener("pointermove", event => {
         if (!drag || event.pointerId !== drag.id) return;
 
+        // A mouse released outside the gallery before the drag started (no pointer capture yet)
+        // never sends pointerup here: end the drag as soon as no button is pressed anymore.
+        if (event.pointerType === "mouse" && event.buttons === 0) {
+            endDrag(event);
+            return;
+        }
+
         const deltaX = event.clientX - drag.startX;
         if (!drag.active) {
             if (Math.abs(deltaX) < DRAG_THRESHOLD) return;
