@@ -7,6 +7,7 @@ Requires Python 3.11 or newer.
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt
+.venv/bin/playwright install chromium   # browser for the browser tests (once, ~150 MB)
 cp .env.example .env
 ```
 
@@ -36,12 +37,31 @@ sending the contact form.
 
 The tests run the real FastAPI app with a fake mailer, so they need no mail server and no `.env`.
 
+- `tests/test_*.py`: API and translation tests (fast, no browser).
+- `tests/e2e/`: browser tests with [Playwright](https://playwright.dev/python/)
+  (`pytest-playwright`). They start the app with uvicorn on a free local port and drive headless
+  Chromium through the main flows: gallery (drag, keyboard, prev/next buttons, parallax), theme
+  toggle, language switch, mobile menu at 375px and the contact form (field errors, successful
+  send, rate limit, mail error). Each test gets a fresh browser (empty `localStorage`), German,
+  light mode and reduced motion, so animations finish instantly.
+
+```bash
+.venv/bin/pytest                          # everything
+.venv/bin/pytest -m "not e2e"             # without the browser tests
+.venv/bin/pytest tests/e2e --headed       # watch the browser
+.venv/bin/pytest tests/e2e --headed --slowmo 500
+```
+
+The browser tests need Chromium (`.venv/bin/playwright install chromium`); without it they fail
+with "Executable doesn't exist". On failure, `--tracing retain-on-failure` saves a trace to
+`test-results/` that `.venv/bin/playwright show-trace <file>` opens.
+
 ## Check before committing
 
-Run the tests. The frontend has no automated tests: check changes in a browser at desktop width
-and at phone width (about 375px), in light and dark mode, on every page you touched. For the
-portfolio page, also check that the gallery can be dragged, scrolled sideways and moved with the
-keyboard; for the contact page, send a test message (it appears in the server console).
+Run the tests, including the browser tests. They cover the main flows, but not the look: check
+changes in a browser at desktop width and at phone width (about 375px), in light and dark mode, on
+every page you touched. Add or adjust a test in `tests/e2e` when you change gallery, navigation,
+theme, language or contact form behaviour.
 
 ## Content
 
@@ -68,8 +88,8 @@ them (for example with `sips --resampleHeight 1600` on macOS) and set `width` / 
 
 ## Continuous integration
 
-`.github/workflows/tests.yml` runs `pytest` on GitHub Actions (Python 3.11, the oldest supported
-version):
+`.github/workflows/tests.yml` installs Chromium and runs `pytest` (API and browser tests) on
+GitHub Actions (Python 3.11, the oldest supported version):
 
 - on every pull request into `development` or `main`,
 - after every merge (push) into `development` or `main`,

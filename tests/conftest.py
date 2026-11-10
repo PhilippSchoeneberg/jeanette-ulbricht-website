@@ -2,24 +2,13 @@
 
 import pytest
 from fastapi.testclient import TestClient
+from tests.fakes import FakeMailer
 
 from src.backend.app import create_app
 from src.backend.config import Settings
-from src.backend.mailer import MailError
 
 
 SETTINGS = Settings(contact_recipient="jeanette@example.com", contact_sender="website@example.com")
-
-
-class FakeMailer:
-    def __init__(self):
-        self.sent = []
-        self.fail = False
-
-    def send(self, message):
-        if self.fail:
-            raise MailError("simulated failure")
-        self.sent.append(message)
 
 
 @pytest.fixture

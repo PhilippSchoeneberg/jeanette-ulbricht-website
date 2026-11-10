@@ -40,6 +40,7 @@ src/
     ├── mailer.py           SMTP mailer; console mailer for development
     └── rate_limit.py       In-memory rate limiter
 tests/                      Backend and translation tests (pytest)
+└── e2e/                    Browser tests (Playwright, headless Chromium)
 doc/                        This documentation
 ```
 
