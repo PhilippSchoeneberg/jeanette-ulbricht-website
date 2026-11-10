@@ -1,0 +1,47 @@
+# Runs the pytest suite (backend + translation checks).
+#
+# - On every pull request into development or main: the "tests" check must pass before the
+#   pull request can be merged (required status check in the branch rulesets, see
+#   doc/development.md).
+# - After a merge (push) to development or main: confirms the merged result still passes.
+# - Manually from the Actions tab (workflow_dispatch).
+
+name: Tests
+
+on:
+  pull_request:
+    branches: [development, main]
+  push:
+    branches: [development, main]
+  workflow_dispatch:
+
+# A newer push to the same pull request or branch cancels the older, still running run.
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    # This name is the status check that the branch rulesets require. Keep it stable.
+    name: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # Oldest supported version (see doc/development.md).
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: pytest

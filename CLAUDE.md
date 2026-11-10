@@ -107,3 +107,4 @@ Not decided yet — confirm with the user before starting larger items:
 - Feature branches merge into `development` (via pull request); `development` merges into `main` for a release.
 - Pull requests for features target `development`, not `main`.
 - If uncommitted work is found on `main` or `development`, move it to a feature branch before committing.
+- CI: `.github/workflows/tests.yml` runs `pytest` (job/check name `tests`, Python 3.11) on pull requests into and pushes to `development`/`main`. The GitHub rulesets for both branches require the `tests` check, so PRs can't be merged with failing tests. Run `.venv/bin/pytest` before pushing; don't rename the job without updating the rulesets.
