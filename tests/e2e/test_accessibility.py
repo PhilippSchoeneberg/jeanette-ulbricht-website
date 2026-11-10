@@ -121,13 +121,17 @@ def test_gallery_buttons_stay_focusable_at_the_end(page: Page):
     expect(page.locator("[data-gallery-prev]")).to_have_attribute("aria-disabled", "false")
 
 
-def test_language_toggle_name_starts_with_its_visible_text(page: Page):
+def test_language_toggle_name_starts_with_its_visible_text(page: Page, de, en):
     # WCAG 2.5.3 Label in Name: voice control users say what they see ("EN").
     page.goto("/index.html")
     toggle = page.locator("[data-language-toggle]")
-    for _ in range(2):
-        visible = toggle.inner_text().strip()
-        assert toggle.get_attribute("aria-label").startswith(visible)
+
+    # Switching loads the translation asynchronously: wait for each state with expect() instead
+    # of reading text and label at two different moments.
+    for strings in (de, en):
+        assert strings["language_switch_label"].startswith(strings["language_switch_code"])
+        expect(toggle).to_have_text(strings["language_switch_code"])
+        expect(toggle).to_have_attribute("aria-label", strings["language_switch_label"])
         toggle.click()
 
 
