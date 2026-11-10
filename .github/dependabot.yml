@@ -1,0 +1,24 @@
+# Weekly update pull requests for the CI actions (pinned to commit SHAs in
+# .github/workflows/tests.yml) and the Python dependencies in uv.lock. They target the default
+# branch (development) and go through the required "tests" check like any other pull request.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "CI"
+
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # One pull request for all dev tools, one for the app's runtime dependencies.
+      dev-dependencies:
+        dependency-type: development
+      runtime-dependencies:
+        dependency-type: production
+    commit-message:
+      prefix: "Dependencies"

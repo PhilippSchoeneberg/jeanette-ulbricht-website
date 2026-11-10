@@ -120,7 +120,8 @@ def test_rate_limiter_window_expires():
 
 
 def test_api_docs_describe_all_responses(client):
-    schema = client.get("/api/openapi.json").json()
+    # The docs endpoints only exist in development; the schema itself is always built.
+    schema = client.app.openapi()
     responses = schema["paths"]["/api/contact"]["post"]["responses"]
 
     assert set(responses) == {"200", "422", "429", "502"}

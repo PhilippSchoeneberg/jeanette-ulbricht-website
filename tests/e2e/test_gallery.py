@@ -1,5 +1,7 @@
 """Portfolio gallery (js/gallery.js): dragging, keyboard and the previous/next buttons."""
 
+import time
+
 import pytest
 from playwright.sync_api import Browser, Page, expect
 
@@ -130,7 +132,20 @@ def test_parallax_moves_images_with_the_track(browser: Browser, base_url, browse
         viewport.focus()
         viewport.press("End")
         # The animation takes 1200ms; wait until the images reach the other side.
-        page.wait_for_function(f"{object_position}.startsWith('0%')", timeout=5000)
-        page.wait_for_function(f"Math.abs(({TRACK_POSITION})() - ({MAX_POSITION})()) < 1", timeout=5000)
+        wait_until(lambda: page.evaluate(object_position).startswith("0%"))
+        wait_until(lambda: abs(page.evaluate(TRACK_POSITION) - page.evaluate(MAX_POSITION)) < 1)
     finally:
         context.close()
+
+
+def wait_until(condition, timeout=5.0, interval=0.05):
+    """Polls `condition` from Python.
+
+    Not page.wait_for_function: it evaluates its expression with eval() inside the page, which
+    the site's Content Security Policy (no 'unsafe-eval') rightly blocks.
+    """
+    deadline = time.monotonic() + timeout
+    while not condition():
+        if time.monotonic() > deadline:
+            raise AssertionError(f"condition not met within {timeout:.1f}s")
+        time.sleep(interval)

@@ -18,7 +18,7 @@ Needs [uv](https://docs.astral.sh/uv/) (`brew install uv`).
 uv sync
 ```
 ```bash
-cp .env.example .env        # leave SMTP_HOST empty to print contact messages to the console
+cp .env.example .env        # APP_ENV=development: contact messages are printed to the console
 ```
 ```bash
 uv run uvicorn src.backend.main:app --reload

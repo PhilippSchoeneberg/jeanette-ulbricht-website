@@ -3,8 +3,8 @@
     "configurations": [
         {
             "name": "app",
-            "runtimeExecutable": ".venv/bin/uvicorn",
-            "runtimeArgs": ["src.backend.main:app", "--reload", "--port", "8000"],
+            "runtimeExecutable": "env",
+            "runtimeArgs": ["APP_ENV=development", ".venv/bin/uvicorn", "src.backend.main:app", "--reload", "--port", "8000", "--no-server-header"],
             "port": 8000
         }
     ]
