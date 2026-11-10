@@ -71,12 +71,30 @@
         toggle.setAttribute("aria-expanded", String(open));
         updateMenuLabel();
         document.body.classList.toggle("nav-open", open);
+        // The open menu covers the page: make everything behind it unreachable for keyboard
+        // and screen reader users, so focus can't disappear behind the menu.
+        for (const element of document.body.children) {
+            if (element !== nav) element.inert = open;
+        }
+    }
+
+    // The menu is visibility: hidden until its opening transition has started (one frame later,
+    // also with reduced motion), and hidden elements can't take focus: wait until it is visible.
+    function focusFirstMenuLink(attempt = 0) {
+        const link = nav.querySelector("#nav-menu a");
+        if (!link || !nav.classList.contains("is-open")) return;
+        link.focus();
+        if (document.activeElement !== link && attempt < 20) {
+            requestAnimationFrame(() => focusFirstMenuLink(attempt + 1));
+        }
     }
 
     if (nav && toggle) {
         document.addEventListener("languagechange", updateMenuLabel);
         toggle.addEventListener("click", () => {
-            setMenuOpen(!nav.classList.contains("is-open"));
+            const open = !nav.classList.contains("is-open");
+            setMenuOpen(open);
+            if (open) focusFirstMenuLink();
         });
 
         document.addEventListener("keydown", event => {

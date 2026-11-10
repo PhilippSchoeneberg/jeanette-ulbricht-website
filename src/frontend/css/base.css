@@ -32,8 +32,9 @@
     --color-notice-bg: #fff4ce;
     --color-notice-text: #5c4400;
     --color-error: #d70015;
-    --color-success: #248a3d;
+    --color-success: #1b7d36;
     --color-input-bg: #ffffff;
+    --color-input-border: #86868b;
 
     /* Typography: system fonts only, nothing is loaded from third parties */
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -70,6 +71,7 @@
     --color-error: #ff6961;
     --color-success: #30d158;
     --color-input-bg: #1d1d1f;
+    --color-input-border: #6e6e73;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -91,6 +93,7 @@
         --color-error: #ff6961;
         --color-success: #30d158;
         --color-input-bg: #1d1d1f;
+        --color-input-border: #6e6e73;
     }
 }
 
@@ -165,6 +168,12 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Links inside running text are underlined, so they don't rely on colour alone (WCAG 1.4.1). */
+p a:not(.button) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
 }
 
 button {
@@ -333,6 +342,11 @@ button {
     height: 100%;
     margin: 0 auto;
     padding: 0 var(--gutter);
+}
+
+/* The accent-blue focus ring is too faint on the dark bar: use white there. */
+.global-nav :focus-visible {
+    outline-color: #ffffff;
 }
 
 .global-nav__brand {
@@ -700,9 +714,11 @@ button {
         transition: none;
     }
 
+    /* No transitions at all. (Shortening them with transition-duration would give *every*
+       element a tiny transition on every property, since transition-property defaults to "all".) */
     *,
     *::before,
     *::after {
-        transition-duration: 0.01ms !important;
+        transition: none !important;
     }
 }

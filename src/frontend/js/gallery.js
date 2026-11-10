@@ -46,9 +46,13 @@
             image.animate({ objectPosition }, options);
         }
 
-        prevButton.disabled = position <= 0;
-        nextButton.disabled = position >= max - 1;
+        // aria-disabled instead of disabled: the button stays focusable at the ends, so keyboard
+        // focus doesn't drop to the page (browsers differ for focused, disabled buttons).
+        prevButton.setAttribute("aria-disabled", String(position <= 0));
+        nextButton.setAttribute("aria-disabled", String(position >= max - 1));
     }
+
+    const isDisabled = button => button.getAttribute("aria-disabled") === "true";
 
     function moveBy(delta) {
         position += delta;
@@ -116,8 +120,12 @@
     });
 
     // Buttons
-    prevButton.addEventListener("click", () => moveBy(-stepSize()));
-    nextButton.addEventListener("click", () => moveBy(stepSize()));
+    prevButton.addEventListener("click", () => {
+        if (!isDisabled(prevButton)) moveBy(-stepSize());
+    });
+    nextButton.addEventListener("click", () => {
+        if (!isDisabled(nextButton)) moveBy(stepSize());
+    });
 
     window.addEventListener("resize", () => render({ animate: false }));
     reducedMotion.addEventListener("change", () => render({ animate: false }));

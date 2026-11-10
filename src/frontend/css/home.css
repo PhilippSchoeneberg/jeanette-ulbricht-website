@@ -262,11 +262,11 @@
     transition: background-color 0.2s var(--ease), opacity 0.2s var(--ease);
 }
 
-.gallery__button:hover:not(:disabled) {
+.gallery__button:hover:not([aria-disabled="true"]) {
     background-color: var(--color-control-bg-hover);
 }
 
-.gallery__button:disabled {
+.gallery__button[aria-disabled="true"] {
     cursor: default;
     opacity: 0.42;
 }
