@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="title_contact">Kontakt – Jeanette Ulbricht, Mediengestalterin</title>
+    <meta name="description" content="Kontakt zu Jeanette Ulbricht, Mediengestalterin." data-i18n-content="description_contact">
+    <meta name="author" content="Philipp Schöneberg">
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <script src="js/head.js"></script>
+    <script src="js/i18n.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/contact-form.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main" data-i18n="skip_link">Zum Inhalt springen</a>
+
+    <header class="global-nav" data-nav>
+        <nav class="global-nav__inner" aria-label="Hauptnavigation" data-i18n-aria-label="nav_label">
+            <a class="global-nav__brand" href="index.html">Jeanette Ulbricht</a>
+            <button class="global-nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen" data-nav-toggle>
+                <span class="global-nav__toggle-bar"></span>
+                <span class="global-nav__toggle-bar"></span>
+            </button>
+            <ul role="list" class="global-nav__menu" id="nav-menu">
+                <li><a href="biography.html" data-i18n="nav_biography">Biografie</a></li>
+                <li><a href="index.html" data-i18n="nav_portfolio">Portfolio</a></li>
+                <li><a href="contact.html" aria-current="page" data-i18n="nav_contact">Kontakt</a></li>
+            </ul>
+            <div class="global-nav__actions">
+                <button class="language-toggle" type="button" lang="en" aria-label="EN – Switch to English" data-language-toggle data-i18n="language_switch_code" data-i18n-lang="language_switch_lang" data-i18n-aria-label="language_switch_label">EN</button>
+                <button class="theme-toggle" type="button" aria-label="Dunkles Design aktivieren" data-theme-toggle>
+                    <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                    <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <header class="page-hero">
+            <p class="eyebrow" data-i18n="nav_contact">Kontakt</p>
+            <h1 class="headline-hero" data-i18n="contact_title">Sprechen wir über Ihr Projekt.</h1>
+            <p class="intro" data-i18n="contact_intro">Für Anfragen, Projekte und Kooperationen erreichen Sie mich hier.</p>
+        </header>
+
+        <section class="section" aria-label="Kontaktdaten" data-i18n-aria-label="contact_details_label">
+            <div class="section__inner">
+                <ul role="list" class="card-grid contact-grid">
+                    <li class="card contact-card reveal">
+                        <h2 class="contact-card__label" data-i18n="field_email">E-Mail</h2>
+                        <!-- Placeholder: replace with the real address and a mailto: link -->
+                        <p class="contact-card__value">xxxxxxxx.xxxxxxxxxxx@xxx.xx</p>
+                    </li>
+                    <li class="card contact-card reveal">
+                        <h2 class="contact-card__label" data-i18n="contact_phone">Telefon</h2>
+                        <!-- Placeholder: replace with the real number and a tel: link -->
+                        <p class="contact-card__value">+49 XXXX XXXXXXX</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section section--alt" aria-labelledby="form-title">
+            <div class="section__inner contact-form-wrapper">
+                <h2 class="section-headline reveal" id="form-title">
+                    <span data-i18n="form_title">Nachricht schreiben.</span>
+                    <span class="section-headline__muted" data-i18n="form_subtitle">Ich melde mich bei Ihnen.</span>
+                </h2>
+
+                <noscript>
+                    <p class="form-status form-status--error">Das Kontaktformular benötigt JavaScript. Bitte schreiben Sie mir alternativ eine E-Mail.</p>
+                </noscript>
+
+                <form class="contact-form reveal" action="/api/contact" method="post" novalidate data-contact-form>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label class="form-field__label" for="contact-name" data-i18n="field_name">Name</label>
+                            <input class="form-field__input" id="contact-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="contact-name-error">
+                            <p class="form-field__error" id="contact-name-error" data-error-for="name"></p>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field__label" for="contact-email" data-i18n="field_email">E-Mail</label>
+                            <input class="form-field__input" id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="contact-email-error">
+                            <p class="form-field__error" id="contact-email-error" data-error-for="email"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-field__label" for="contact-subject"><span data-i18n="field_subject">Betreff</span> <span class="form-field__optional" data-i18n="field_optional">(optional)</span></label>
+                        <input class="form-field__input" id="contact-subject" name="subject" type="text" maxlength="150" aria-describedby="contact-subject-error">
+                        <p class="form-field__error" id="contact-subject-error" data-error-for="subject"></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-field__label" for="contact-message" data-i18n="field_message">Nachricht</label>
+                        <textarea class="form-field__input form-field__input--textarea" id="contact-message" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="contact-message-error"></textarea>
+                        <p class="form-field__error" id="contact-message-error" data-error-for="message"></p>
+                    </div>
+
+                    <!-- Honeypot against spam bots: hidden from people, must stay empty -->
+                    <div class="form-honeypot" aria-hidden="true">
+                        <label for="contact-website">Website (bitte leer lassen)</label>
+                        <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <!-- Placeholder wording: to be checked together with the Datenschutzerklärung -->
+                    <p class="contact-form__privacy">
+                        <span data-i18n="form_privacy_text">Ihre Angaben werden nur zur Bearbeitung Ihrer Anfrage verwendet. Mehr dazu in der</span>
+                        <a href="datenschutz.html" data-i18n="form_privacy_link">Datenschutzerklärung</a><span data-i18n="form_privacy_end">.</span>
+                    </p>
+
+                    <div class="contact-form__footer">
+                        <button class="button contact-form__submit" type="submit" data-i18n="form_submit">Nachricht senden</button>
+                        <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="global-footer">
+        <div class="global-footer__inner">
+            <nav class="global-footer__nav" aria-label="Fußzeile" data-i18n-aria-label="footer_label">
+                <ul role="list">
+                    <li><a href="biography.html" data-i18n="nav_biography">Biografie</a></li>
+                    <li><a href="index.html" data-i18n="nav_portfolio">Portfolio</a></li>
+                    <li><a href="contact.html" data-i18n="nav_contact">Kontakt</a></li>
+                </ul>
+            </nav>
+            <div class="global-footer__legal">
+                <p data-i18n="footer_copyright">Copyright © 2026 Jeanette Ulbricht. Alle Rechte vorbehalten.</p>
+                <ul role="list" class="global-footer__legal-links">
+                    <li><a href="impressum.html" data-i18n="footer_imprint">Impressum</a></li>
+                    <li><a href="datenschutz.html" data-i18n="footer_privacy">Datenschutz</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

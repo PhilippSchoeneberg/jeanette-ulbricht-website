@@ -1,0 +1,733 @@
+/* ==========================================================================
+   Base styles shared by every page: tokens, reset, typography, buttons,
+   global navigation, footer and shared components (page hero, sections,
+   cards, scroll reveal).
+   ========================================================================== */
+
+/* Colour themes: light by default, dark when the visitor's system prefers it,
+   unless a theme was chosen with the toggle (data-theme on <html>, set by the
+   inline script in each page's <head> and by js/main.js). */
+:root {
+    color-scheme: light;
+
+    /* Colours */
+    --color-bg: #ffffff;
+    --color-bg-alt: #f5f5f7;
+    --color-bg-dark: #000000;
+    --color-tile: #f5f5f7;
+    --color-tile-dark: #000000;
+    --color-text: #1d1d1f;
+    --color-text-secondary: #6e6e73;
+    --color-text-on-dark: #f5f5f7;
+    --color-text-secondary-on-dark: #a1a1a6;
+    --color-accent: #0071e3;
+    --color-accent-hover: #0077ed;
+    --color-link: #0066cc;
+    --color-link-on-dark: #2997ff;
+    --color-border: #d2d2d7;
+    --color-nav-bg: rgba(22, 22, 23, 0.8);
+    --color-nav-text: #e8e8ed;
+    --color-control-bg: rgba(210, 210, 215, 0.64);
+    --color-control-bg-hover: rgba(223, 223, 227, 0.7);
+    --color-notice-bg: #fff4ce;
+    --color-notice-text: #5c4400;
+    --color-error: #d70015;
+    --color-success: #1b7d36;
+    --color-input-bg: #ffffff;
+    --color-input-border: #86868b;
+
+    /* Typography: system fonts only, nothing is loaded from third parties */
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    /* Layout */
+    --nav-height: 48px;
+    --content-width: 980px;
+    --gutter: 22px;
+    --tile-gap: 12px;
+    --radius-card: 18px;
+    --radius-pill: 980px;
+    --section-space: 100px;
+
+    /* Motion */
+    --ease: cubic-bezier(0.28, 0.11, 0.32, 1);
+}
+
+/* Dark colour tokens, used for an explicit choice and for the system preference */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-bg: #000000;
+    --color-bg-alt: #161617;
+    --color-tile: #1d1d1f;
+    --color-tile-dark: #000000;
+    --color-text: #f5f5f7;
+    --color-text-secondary: #a1a1a6;
+    --color-link: #2997ff;
+    --color-border: #424245;
+    --color-control-bg: rgba(66, 66, 69, 0.72);
+    --color-control-bg-hover: rgba(80, 80, 84, 0.8);
+    --color-notice-bg: #3a2f00;
+    --color-notice-text: #ffe08a;
+    --color-error: #ff6961;
+    --color-success: #30d158;
+    --color-input-bg: #1d1d1f;
+    --color-input-border: #6e6e73;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        --color-bg: #000000;
+        --color-bg-alt: #161617;
+        --color-tile: #1d1d1f;
+        --color-tile-dark: #000000;
+        --color-text: #f5f5f7;
+        --color-text-secondary: #a1a1a6;
+        --color-link: #2997ff;
+        --color-border: #424245;
+        --color-control-bg: rgba(66, 66, 69, 0.72);
+        --color-control-bg-hover: rgba(80, 80, 84, 0.8);
+        --color-notice-bg: #3a2f00;
+        --color-notice-text: #ffe08a;
+        --color-error: #ff6961;
+        --color-success: #30d158;
+        --color-input-bg: #1d1d1f;
+        --color-input-border: #6e6e73;
+    }
+}
+
+@media (max-width: 734px) {
+    :root {
+        --gutter: 16px;
+        --section-space: 64px;
+    }
+}
+
+/* Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.47;
+    letter-spacing: -0.022em;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+body.nav-open {
+    overflow: hidden;
+}
+
+h1, h2, h3, p, ul, ol, figure {
+    margin: 0;
+}
+
+h1, h2, h3,
+.intro,
+.tile__subhead {
+    text-wrap: balance;
+}
+
+ul, ol {
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Links inside running text are underlined, so they don't rely on colour alone (WCAG 1.4.1). */
+p a:not(.button) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+button {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+[id] {
+    scroll-margin-top: calc(var(--nav-height) + 12px);
+}
+
+.skip-link {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 200;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #fff;
+    transform: translateY(-200%);
+}
+
+.skip-link:focus {
+    transform: none;
+}
+
+/* Typography
+   ========================================================================== */
+
+.eyebrow {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.19;
+    letter-spacing: 0.011em;
+    color: var(--color-text-secondary);
+}
+
+.headline-hero {
+    font-size: 80px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+}
+
+.section-headline {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.003em;
+}
+
+.section-headline__muted {
+    color: var(--color-text-secondary);
+}
+
+.intro {
+    font-size: 24px;
+    line-height: 1.17;
+    letter-spacing: 0.009em;
+}
+
+@media (max-width: 1068px) {
+    .headline-hero {
+        font-size: 64px;
+    }
+
+    .section-headline {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 734px) {
+    .eyebrow {
+        font-size: 17px;
+    }
+
+    .headline-hero {
+        font-size: 44px;
+    }
+
+    .section-headline {
+        font-size: 32px;
+        line-height: 1.125;
+    }
+
+    .intro {
+        font-size: 19px;
+        line-height: 1.21;
+    }
+}
+
+/* Buttons
+   ========================================================================== */
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.button {
+    display: inline-block;
+    min-width: 28px;
+    padding: 11px 21px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent);
+    color: #fff;
+    font-size: 17px;
+    line-height: 1.18;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.button:hover {
+    background-color: var(--color-accent-hover);
+    text-decoration: none;
+}
+
+.button--secondary {
+    background-color: transparent;
+    border-color: var(--color-link);
+    color: var(--color-link);
+}
+
+.button--secondary:hover {
+    background-color: var(--color-link);
+    color: #fff;
+}
+
+.theme-dark .button--secondary {
+    border-color: var(--color-link-on-dark);
+    color: var(--color-link-on-dark);
+}
+
+.theme-dark .button--secondary:hover {
+    background-color: var(--color-link-on-dark);
+    color: #000;
+}
+
+/* Global navigation
+   ========================================================================== */
+
+.global-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--nav-height);
+    background-color: var(--color-nav-bg);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+}
+
+.global-nav__inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    max-width: var(--content-width);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+/* The accent-blue focus ring is too faint on the dark bar: use white there. */
+.global-nav :focus-visible {
+    outline-color: #ffffff;
+}
+
+.global-nav__brand {
+    margin-right: auto;
+    color: var(--color-nav-text);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.global-nav__brand:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.global-nav__menu {
+    display: flex;
+    gap: 36px;
+}
+
+.global-nav__menu a {
+    color: var(--color-nav-text);
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    opacity: 0.8;
+    transition: opacity 0.2s var(--ease);
+}
+
+.global-nav__menu a:hover,
+.global-nav__menu a[aria-current="page"] {
+    opacity: 1;
+    text-decoration: none;
+}
+
+.global-nav__menu a[aria-current="page"] {
+    font-weight: 600;
+}
+
+.global-nav__toggle {
+    display: none;
+}
+
+/* Light/dark switch (needs JS, so it is hidden without it) */
+.theme-toggle {
+    display: none;
+}
+
+.js .theme-toggle {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--color-nav-text);
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.js .theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+}
+
+.theme-toggle svg {
+    width: 17px;
+    height: 17px;
+}
+
+.theme-toggle__sun,
+:root[data-theme="dark"] .theme-toggle__moon {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__sun {
+    display: block;
+}
+
+/* Language and theme switches, side by side */
+.global-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Language switch (needs JS, so it is hidden without it). Shows the other language's code. */
+.language-toggle {
+    display: none;
+}
+
+.js .language-toggle {
+    display: block;
+    flex: none;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 16px;
+    background: none;
+    color: var(--color-nav-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.js .language-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+}
+
+/* Hide the page while a non-German translation loads (set by the inline <head> script). */
+.i18n-loading body {
+    visibility: hidden;
+}
+
+@media (max-width: 833px) {
+    .global-nav__inner {
+        gap: 12px;
+    }
+
+    .global-nav__menu {
+        gap: 20px;
+    }
+
+    /* Collapsible menu, only when JS is available to open it */
+    .js .global-nav__toggle {
+        position: relative;
+        display: block;
+        order: 2;
+        width: 48px;
+        height: var(--nav-height);
+        margin-right: -14px;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+    }
+
+    .global-nav__toggle-bar {
+        position: absolute;
+        left: 16px;
+        width: 16px;
+        height: 1.5px;
+        border-radius: 1px;
+        background-color: var(--color-nav-text);
+        transition: transform 0.3s var(--ease), top 0.3s var(--ease);
+    }
+
+    .global-nav__toggle-bar:nth-child(1) {
+        top: 20px;
+    }
+
+    .global-nav__toggle-bar:nth-child(2) {
+        top: 27px;
+    }
+
+    .global-nav.is-open .global-nav__toggle-bar:nth-child(1) {
+        top: 23.5px;
+        transform: rotate(45deg);
+    }
+
+    .global-nav.is-open .global-nav__toggle-bar:nth-child(2) {
+        top: 23.5px;
+        transform: rotate(-45deg);
+    }
+
+    /* Absolute (not fixed): backdrop-filter on .global-nav makes it the
+       containing block for fixed descendants anyway. */
+    .js .global-nav__menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        height: calc(100vh - var(--nav-height));
+        height: calc(100dvh - var(--nav-height));
+        overflow-y: auto;
+        flex-direction: column;
+        gap: 0;
+        padding: 12px 40px;
+        background-color: #161617;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-12px);
+        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s linear 0.3s;
+    }
+
+    .js .global-nav.is-open .global-nav__menu {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s;
+    }
+
+    .js .global-nav__menu a {
+        display: block;
+        padding: 10px 0;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.14;
+        letter-spacing: 0.007em;
+        opacity: 1;
+    }
+}
+
+/* Global footer
+   ========================================================================== */
+
+.global-footer {
+    padding: 24px var(--gutter) 32px;
+    background-color: var(--color-bg-alt);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    line-height: 1.33;
+    letter-spacing: -0.01em;
+}
+
+.global-footer__inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.global-footer a {
+    color: var(--color-text);
+}
+
+.global-footer__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.global-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 16px;
+}
+
+.global-footer__legal-links {
+    display: flex;
+}
+
+.global-footer__legal-links li + li::before {
+    content: "|";
+    margin: 0 8px;
+    color: var(--color-border);
+}
+
+@media (max-width: 734px) {
+    .global-footer__legal {
+        flex-direction: column;
+    }
+}
+
+/* Shared components
+   ========================================================================== */
+
+/* Page hero: large centred headline at the top of a page */
+.page-hero {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 96px var(--gutter) 64px;
+    text-align: center;
+}
+
+.page-hero .eyebrow {
+    margin-bottom: 8px;
+}
+
+.page-hero .intro {
+    max-width: 680px;
+    margin: 20px auto 0;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 734px) {
+    .page-hero {
+        padding: 56px var(--gutter) 40px;
+    }
+}
+
+/* Sections */
+.section {
+    padding: var(--section-space) var(--gutter);
+}
+
+.section--alt {
+    background-color: var(--color-bg-alt);
+}
+
+.section__inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.section__inner > .section-headline {
+    margin-bottom: 40px;
+}
+
+/* Cards */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    padding: 32px;
+    border-radius: var(--radius-card);
+    background-color: var(--color-bg);
+}
+
+.section:not(.section--alt) .card {
+    background-color: var(--color-bg-alt);
+}
+
+.card__title {
+    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.17;
+}
+
+.card__text {
+    color: var(--color-text-secondary);
+}
+
+/* Placeholder marker: makes unfinished content easy to spot */
+.placeholder-note {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Scroll reveal (enabled by js/main.js) */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+
+.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* No transitions at all. (Shortening them with transition-duration would give *every*
+       element a tiny transition on every property, since transition-property defaults to "all".) */
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+}
+
+/* Print everything: blocks that fade in on scroll would otherwise stay invisible on paper. */
+@media print {
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

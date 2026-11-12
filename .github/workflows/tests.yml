@@ -1,0 +1,73 @@
+# Runs ruff (lint + format check) and the pytest suite (backend, translation checks and
+# Playwright browser tests).
+#
+# - On every pull request into development or main: the "tests" check must pass before the
+#   pull request can be merged (required status check in the branch rulesets, see
+#   doc/development.md).
+# - After a merge (push) to development or main: confirms the merged result still passes.
+# - Manually from the Actions tab (workflow_dispatch).
+
+name: Tests
+
+on:
+  pull_request:
+    branches: [development, main]
+  push:
+    branches: [development, main]
+  workflow_dispatch:
+
+# A newer push to the same pull request or branch cancels the older, still running run.
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# Actions are pinned to full commit SHAs (a tag like @v4 can be moved to other code);
+# Dependabot (.github/dependabot.yml) proposes updates.
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    # This name is the status check that the branch rulesets require. Keep it stable.
+    name: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2  # v10.3.3
+        with:
+          # Same uv version as FormelX; bump both together.
+          version: "0.13.7"
+          # Oldest supported version (requires-python in pyproject.toml).
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Lock file is up to date
+        run: uv lock --check
+
+      # Linting runs in this job (not a separate one) so the existing required "tests" check
+      # covers it too.
+      - name: Lint (ruff)
+        run: uv run ruff check --output-format=github .
+
+      - name: Check formatting (ruff)
+        run: uv run ruff format --check .
+
+      # Chromium for the browser tests in tests/e2e (cached per locked Playwright version),
+      # plus the system libraries it needs.
+      - name: Cache Playwright browser
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+
+      - name: Install Playwright browser
+        run: uv run playwright install --with-deps chromium
+
+      - name: Run tests
+        run: uv run pytest

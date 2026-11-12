@@ -1,0 +1,11 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "app",
+            "runtimeExecutable": "env",
+            "runtimeArgs": ["APP_ENV=development", ".venv/bin/uvicorn", "src.backend.main:app", "--reload", "--port", "8000", "--no-server-header"],
+            "port": 8000
+        }
+    ]
+}
